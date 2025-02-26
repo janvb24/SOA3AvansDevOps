@@ -1,0 +1,125 @@
+@startuml
+
+package "Notifications" {
+    ' Strategy pattern
+    interface ISendNotificationStrategy {
+        + Send(): void
+    }
+    Class EmailSendNotificationStrategy
+    Class SmsSendNotificationStrategy
+
+    'Adaptor pattern
+    Class SmsSendNotificationAdapter
+    Class EmailSendNotificationAdapter
+    Class EmailLibrary
+    Class SmsLibrary
+
+    interface INotificationService {
+
+    }
+    Class NotificationService
+
+    
+    ' Relations
+    EmailSendNotificationStrategy ..|> ISendNotificationStrategy
+    SmsSendNotificationStrategy ..|> ISendNotificationStrategy
+    SmsSendNotificationAdapter <-- SmsSendNotificationStrategy 
+    EmailSendNotificationAdapter <-- EmailSendNotificationStrategy
+    EmailLibrary <-- EmailSendNotificationAdapter
+    SmsLibrary <-- SmsSendNotificationAdapter
+
+    NotificationService ..|> INotificationService
+    NotificationService --> ISendNotificationStrategy
+}
+
+package "DevOps" {
+    package "PipeLine" {
+        'Composite pattern
+        abstract Component{
+            + {abstract} Operation(): void
+        
+        }
+
+        Class Composite{
+            + add(): void
+            + remove(): void
+            + getChild(): void
+        }
+
+        'Compisites
+        interface IPipeline
+        Class Pipeline
+        Pipeline ..|> IPipeline
+        IPipeline --|> Composite
+        
+        'Leaves
+        interface IDeployAction {
+            + Deploy(): void
+        }
+        Class AzureDeployAction
+        Class CustomDeployAction
+        AzureDeployAction ..|> IDeployAction
+        CustomDeployAction ..|> IDeployAction
+
+        interface ISourceAction 
+        Class GitSourceAction
+        GitSourceAction ..|> ISourceAction
+        ISourceAction --|> Component
+
+        interface IPackageAction 
+        Class NpmPackageAction
+        Class NugetPackageAction
+        Class MavenPackageAction
+        NpmPackageAction ..|> IPackageAction
+        NugetPackageAction ..|> IPackageAction
+        MavenPackageAction ..|> IPackageAction
+        IPackageAction --|> Component
+
+        interface IBuildAction
+        Class DotNetBuildAction
+        Class DotNetCoreBuildAction
+        Class MavenBuildAction
+        Class AntBuildAction
+        Class JenkinsBuildAction
+        DotNetBuildAction ..|> IBuildAction
+        DotNetCoreBuildAction ..|> IBuildAction
+        MavenBuildAction ..|> IBuildAction
+        AntBuildAction ..|> IBuildAction
+        JenkinsBuildAction ..|> IBuildAction        
+        IBuildAction --|> Component
+        
+        interface ITestAction
+        Class RunTestAction
+        Class PublishTestResultAction
+        Class PublishCodeCoverageResultAction
+        RunTestAction ..|> ITestAction
+        PublishTestResultAction ..|> ITestAction
+        PublishCodeCoverageResultAction ..|> ITestAction
+        ITestAction --|> Component
+
+        interface IAnalysisAction
+        Class SonarqubeAnalysisAction
+        SonarqubeAnalysisAction ..|> IAnalysisAction
+        IAnalysisAction --|> Component
+
+        interface IUtilityAction
+        Class BatchUtilityAction
+        Class CmdUtilityAction
+        Class FilesCopyAction
+        Class FilesDeleteAction
+        Class FilesDownloadAction
+        BatchUtilityAction ..|> IUtilityAction
+        CmdUtilityAction ..|> IUtilityAction
+        FilesCopyAction ..|> IUtilityAction
+        FilesDeleteAction ..|> IUtilityAction
+        FilesDownloadAction ..|> IUtilityAction        
+        IUtilityAction --|> Component
+
+        'Relations
+        Composite --|> Component
+        Component --> Composite
+        IDeployAction --|> Component
+    }
+}
+
+@enduml
