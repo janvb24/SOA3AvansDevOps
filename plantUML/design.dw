@@ -175,7 +175,86 @@ package "VersionControl" {
 }
 
 package "ProjectManagementSystem" {
+    'State pattern (Sprints)
+    interface ISprintState
+    Class CreatedSprintState
+    Class DoingSprintState
+    Class FinishedSprintState
+    Class ClosedSprintState
 
+    CreatedSprintState ..|> ISprintState
+    DoingSprintState ..|> ISprintState
+    FinishedSprintState ..|> ISprintState
+    ClosedSprintState ..|> ISprintState
+
+    abstract Sprint {
+        - state: ISprintState
+        + ChangeState(state: ISprintState)
+    }
+    Class ReviewSprint
+    Class ReleaseSprint
+    ReviewSprint --|> Sprint
+    ReleaseSprint --|> Sprint
+    Sprint --> ISprintState
+
+    Class Backlog
+    Sprint --> Backlog
+
+    Class Project
+    Project --> Backlog
+    Project --> Sprint
+
+    abstract BacklogItem {
+        - state: IBacklogItemState
+        + ChangeState(state: IBacklogItemState)
+    }
+    class EditableBacklogItem {
+        + EditableBacklogItem (backlogItem: NonEditableBackLogItem)
+    }
+    class NonEditableBackLogItem {
+        + NonEditableBackLogItem (backlogItem: EditableBacklogItem)
+    }
+    BacklogItem <-- Backlog
+    BacklogItem <-- BacklogItem
+    EditableBacklogItem --|> BacklogItem
+    NonEditableBackLogItem --|> BacklogItem
+    BacklogItem --> IBacklogItemState
+
+   'State pattern (BacklogItem)
+    interface IBacklogItemState
+    Class TodoBacklogItemState
+    Class DoingBacklogItemState
+    Class ReadyForTestingBacklogItemState
+    Class TestingBacklogItemState
+    class TestedBacklogItemState
+    Class DoneBacklogItemState
+    TodoBacklogItemState ..|> IBacklogItemState
+    DoingBacklogItemState ..|> IBacklogItemState
+    ReadyForTestingBacklogItemState ..|> IBacklogItemState
+    TestingBacklogItemState ..|> IBacklogItemState
+    TestedBacklogItemState ..|> IBacklogItemState
+    DoneBacklogItemState ..|> IBacklogItemState
+
+    class User
+    User <-- Project
+    User <-- BacklogItem
+    User <-- Sprint
+    User <-- ForumTread
+    User <-- ForumTreadItem
+
+    Class Forum
+    Class ForumTread
+    Class ForumTreadItem
+    Forum --> Project
+    ForumTread --> Forum
+    ForumTread --> BacklogItem
+    ForumTread --> ForumTreadItem
+    ForumTreadItem --> ForumTreadItem
+
+    Class Report
+    Class ReportTemplate
+    Report --> ReportTemplate
+    Report --> Sprint
 }
 
 @enduml
