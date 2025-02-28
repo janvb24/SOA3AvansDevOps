@@ -37,13 +37,13 @@ package "DevOps" {
         'Composite pattern
         abstract Component{
             + {abstract} Operation(): void
-        
+            + {abstract} Accept(visitor: Visitor): void
         }
 
         Class Composite{
-            + add(): void
-            + remove(): void
-            + getChild(): void
+            + Add(): void
+            + Remove(): void
+            + GetChild(): void
         }
 
         'Compisites
@@ -119,7 +119,63 @@ package "DevOps" {
         Composite --|> Component
         Component --> Composite
         IDeployAction --|> Component
+
+        'Visitor pattern
+        interface IPipelineVisitor{
+            + VisitPipeline(Pipeline: IPipeline)
+            + VisitSourceAction(Action: ISourceAction)                
+            + VisitPackageAction(Action: IPackageAction)                
+            + VisitBuildAction(Action: IBuildAction)                
+            + VisitTestAction(Action: ITestAction)                
+            + VisitAnalysisAction(Action: ISourceAction)                
+            + VisitUtilityAction(Action: IUtilityAction)                
+        }
+        IPipelineVisitor .. Component
     }
+
+
+    'Pipeline Builder (Builder pattern)
+    interface IPipelineBuilder
+    Class DeployPipelineBuilder
+    Class CustomPipelineBuilder
+    Class PipelineDirector {
+        - builder: IPipelineBuilder
+        + PipelineDirector(builder: IPipelineBuilder)
+        + make(): IPipeline
+    }
+    DeployPipelineBuilder ..|> IPipelineBuilder
+    CustomPipelineBuilder ..|> IPipelineBuilder
+    PipelineDirector --> IPipelineBuilder
+    DeployPipelineBuilder --> Component
+    CustomPipelineBuilder --> Component
+}
+
+package "VersionControl" {
+    interface IGitVersionControl {
+        + Branch()
+        + Commit()
+        + Fetch()
+        + Push()
+    }
+    Class GitVersionControl
+    interface IGitVersionControlAction
+    Class PushGitVersionControlAction
+    Class FetchGitVersionControlAction
+    Class CommitGitVersionControlAction
+    Class BranchGitVersionControlAction
+    
+
+    'Relations
+    IGitVersionControl <|.. GitVersionControl
+    IGitVersionControlAction <-- GitVersionControl
+    PushGitVersionControlAction ..|> IGitVersionControlAction
+    FetchGitVersionControlAction ..|> IGitVersionControlAction
+    CommitGitVersionControlAction ..|> IGitVersionControlAction
+    BranchGitVersionControlAction ..|> IGitVersionControlAction
+}
+
+package "ProjectManagementSystem" {
+
 }
 
 @enduml
