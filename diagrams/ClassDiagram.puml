@@ -47,110 +47,108 @@ package "DevOps" {
         }
 
         'Compisites
-        interface IPipeline
         Class Pipeline {
             - notificationService: INotificationService
             + Pipeline(notificationService: INotificationService)
         }
-        Pipeline ..|> IPipeline
-        IPipeline --|> Composite
+        Pipeline --|> Composite
         
         'Leaves
-        interface IDeployAction {
+        abstract DeployAction {
             + Deploy(): void
         }
         Class AzureDeployAction
         Class CustomDeployAction
-        AzureDeployAction ..|> IDeployAction
-        CustomDeployAction ..|> IDeployAction
+        AzureDeployAction --|> DeployAction
+        CustomDeployAction --|> DeployAction
 
-        interface ISourceAction 
+        abstract SourceAction 
         Class GitSourceAction
-        GitSourceAction ..|> ISourceAction
-        ISourceAction --|> Component
+        GitSourceAction --|> SourceAction
+        SourceAction --|> Component
 
-        interface IPackageAction 
+        abstract PackageAction 
         Class NpmPackageAction
         Class NugetPackageAction
         Class MavenPackageAction
-        NpmPackageAction ..|> IPackageAction
-        NugetPackageAction ..|> IPackageAction
-        MavenPackageAction ..|> IPackageAction
-        IPackageAction --|> Component
+        NpmPackageAction --|> PackageAction
+        NugetPackageAction --|> PackageAction
+        MavenPackageAction --|> PackageAction
+        PackageAction --|> Component
 
-        interface IBuildAction
+        abstract BuildAction
         Class DotNetBuildAction
         Class DotNetCoreBuildAction
         Class MavenBuildAction
         Class AntBuildAction
         Class JenkinsBuildAction
-        DotNetBuildAction ..|> IBuildAction
-        DotNetCoreBuildAction ..|> IBuildAction
-        MavenBuildAction ..|> IBuildAction
-        AntBuildAction ..|> IBuildAction
-        JenkinsBuildAction ..|> IBuildAction        
-        IBuildAction --|> Component
+        DotNetBuildAction --|> BuildAction
+        DotNetCoreBuildAction --|> BuildAction
+        MavenBuildAction --|> BuildAction
+        AntBuildAction --|> BuildAction
+        JenkinsBuildAction --|> BuildAction        
+        BuildAction --|> Component
         
-        interface ITestAction
+        abstract TestAction
         Class RunTestAction
         Class PublishTestResultAction
         Class PublishCodeCoverageResultAction
-        RunTestAction ..|> ITestAction
-        PublishTestResultAction ..|> ITestAction
-        PublishCodeCoverageResultAction ..|> ITestAction
-        ITestAction --|> Component
+        RunTestAction --|> TestAction
+        PublishTestResultAction --|> TestAction
+        PublishCodeCoverageResultAction --|> TestAction
+        TestAction --|> Component
 
-        interface IAnalysisAction
+        abstract AnalysisAction
         Class SonarqubeAnalysisAction
-        SonarqubeAnalysisAction ..|> IAnalysisAction
-        IAnalysisAction --|> Component
+        SonarqubeAnalysisAction --|> AnalysisAction
+        AnalysisAction --|> Component
 
-        interface IUtilityAction
+        abstract UtilityAction
         Class BatchUtilityAction
         Class CmdUtilityAction
         Class FilesCopyAction
         Class FilesDeleteAction
         Class FilesDownloadAction
-        BatchUtilityAction ..|> IUtilityAction
-        CmdUtilityAction ..|> IUtilityAction
-        FilesCopyAction ..|> IUtilityAction
-        FilesDeleteAction ..|> IUtilityAction
-        FilesDownloadAction ..|> IUtilityAction        
-        IUtilityAction --|> Component
+        BatchUtilityAction --|> UtilityAction
+        CmdUtilityAction --|> UtilityAction
+        FilesCopyAction --|> UtilityAction
+        FilesDeleteAction --|> UtilityAction
+        FilesDownloadAction --|> UtilityAction        
+        UtilityAction --|> Component
 
         'Relations
         Composite --|> Component
-        Component --> Composite
-        IDeployAction --|> Component
+        Component <-- Composite
+        DeployAction --|> Component
 
         'Visitor pattern
         interface IPipelineVisitor{
-            + VisitPipeline(Pipeline: IPipeline)
-            + VisitSourceAction(Action: ISourceAction)                
-            + VisitPackageAction(Action: IPackageAction)                
-            + VisitBuildAction(Action: IBuildAction)                
-            + VisitTestAction(Action: ITestAction)                
-            + VisitAnalysisAction(Action: ISourceAction)                
-            + VisitUtilityAction(Action: IUtilityAction)                
+            + VisitPipeline(Pipeline: Pipeline)
+            + VisitSourceAction(Action: SourceAction)                
+            + VisitPackageAction(Action: PackageAction)                
+            + VisitBuildAction(Action: BuildAction)                
+            + VisitTestAction(Action: TestAction)                
+            + VisitAnalysisAction(Action: SourceAction)                
+            + VisitUtilityAction(Action: UtilityAction)                
         }
+        Class RunPiplineVisitor
+        RunPiplineVisitor ..|> IPipelineVisitor
         IPipelineVisitor .. Component
     }
 
 
     'Pipeline Builder (Builder pattern)
-    interface IPipelineBuilder
-    Class DeployPipelineBuilder
-    Class CustomPipelineBuilder
-    Class PipelineDirector {
-        - builder: IPipelineBuilder
-        + PipelineDirector(builder: IPipelineBuilder)
-        + make(): IPipeline
+    interface PipelineBuilder {
+        + createPipeline(): Pipeline
     }
-    DeployPipelineBuilder ..|> IPipelineBuilder
-    CustomPipelineBuilder ..|> IPipelineBuilder
-    PipelineDirector --> IPipelineBuilder
-    DeployPipelineBuilder --> Component
-    CustomPipelineBuilder --> Component
+    Class ConcretePipelineBuilder
+    Class PipelineDirector {
+        - builder: PipelineBuilder
+        + PipelineDirector(builder: PipelineBuilder)
+    }
+    ConcretePipelineBuilder ..|> PipelineBuilder
+    PipelineDirector --> PipelineBuilder
+    ConcretePipelineBuilder --> Component
 }
 
 package "VersionControl" {
@@ -199,7 +197,7 @@ package "ProjectManagementSystem" {
 
     abstract Sprint {
         - state: ISprintState
-        - pipeline: IPipeline
+        - pipeline: Pipeline
         - director: PipelineDirector
         + Sprint(director: PipelineDirector)
         + ChangeState(state: ISprintState)
