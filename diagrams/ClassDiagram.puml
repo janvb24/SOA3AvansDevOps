@@ -179,7 +179,11 @@ package "VersionControl" {
 
 package "ProjectManagementSystem" {
     'State pattern (Sprints) TODO statediagram
-    interface ISprintState
+    interface ISprintState {
+        + StartSprint()
+        + FinishSprint()
+        + CloseSprint()
+    }
     Class CreatedSprintState
     Class DoingSprintState
     Class FinishedSprintState{
@@ -234,7 +238,12 @@ package "ProjectManagementSystem" {
     BacklogItem --> IBacklogItemState
 
    'State pattern (BacklogItem) TODO statediagram
-    interface IBacklogItemState
+    interface IBacklogItemState {
+        + Start()
+        + Complete()
+        + Deny()
+        + Approve()
+    }
     Class TodoBacklogItemState
     Class DoingBacklogItemState {
         - notificationService: INotificationService
