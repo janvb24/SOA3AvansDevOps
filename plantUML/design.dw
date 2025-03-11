@@ -48,7 +48,10 @@ package "DevOps" {
 
         'Compisites
         interface IPipeline
-        Class Pipeline
+        Class Pipeline {
+            - notificationService: INotificationService
+            + Pipeline(notificationService: INotificationService)
+        }
         Pipeline ..|> IPipeline
         IPipeline --|> Composite
         
@@ -175,11 +178,14 @@ package "VersionControl" {
 }
 
 package "ProjectManagementSystem" {
-    'State pattern (Sprints)
+    'State pattern (Sprints) TODO statediagram
     interface ISprintState
     Class CreatedSprintState
     Class DoingSprintState
-    Class FinishedSprintState
+    Class FinishedSprintState{
+        - notificationService: INotificationService
+        + FinishedSprintState(notificationService: INotificationService)
+    }
     Class ClosedSprintState
 
     CreatedSprintState ..|> ISprintState
@@ -189,8 +195,12 @@ package "ProjectManagementSystem" {
 
     abstract Sprint {
         - state: ISprintState
+        - pipeline: IPipeline
+        - director: PipelineDirector
+        + Sprint(director: PipelineDirector)
         + ChangeState(state: ISprintState)
     }
+
     Class ReviewSprint
     Class ReleaseSprint
     ReviewSprint --|> Sprint
@@ -200,7 +210,10 @@ package "ProjectManagementSystem" {
     Class Backlog
     Sprint --> Backlog
 
-    Class Project
+    Class Project {
+        - versionControl: IGitVersionControl
+        + Project(versionControl: IGitVersionControl)
+    }
     Project --> Backlog
     Project --> Sprint
 
@@ -220,12 +233,18 @@ package "ProjectManagementSystem" {
     NonEditableBackLogItem --|> BacklogItem
     BacklogItem --> IBacklogItemState
 
-   'State pattern (BacklogItem)
+   'State pattern (BacklogItem) TODO statediagram
     interface IBacklogItemState
     Class TodoBacklogItemState
-    Class DoingBacklogItemState
+    Class DoingBacklogItemState {
+        - notificationService: INotificationService
+        + DoingBacklogItemState(notificationService: INotificationService)
+    }
     Class ReadyForTestingBacklogItemState
-    Class TestingBacklogItemState
+    Class TestingBacklogItemState {
+        - notificationService: INotificationService
+        + TestingBacklogItemState(notificationService: INotificationService)
+    }
     class TestedBacklogItemState
     Class DoneBacklogItemState
     TodoBacklogItemState ..|> IBacklogItemState
@@ -242,13 +261,16 @@ package "ProjectManagementSystem" {
     User <-- ForumTread
     User <-- ForumTreadItem
 
-    Class Forum
-    Class ForumTread
+    Class Forum 
+    Class ForumTread {
+        - notificationService: INotificationService
+        + ForumTread(notificationService: INotificationService)
+    }
     Class ForumTreadItem
     Forum --> Project
     ForumTread --> Forum
     ForumTread --> BacklogItem
-    ForumTread --> ForumTreadItem
+    ForumTread -- ForumTreadItem
     ForumTreadItem --> ForumTreadItem
 
     Class Report
@@ -256,5 +278,8 @@ package "ProjectManagementSystem" {
     Report --> ReportTemplate
     Report --> Sprint
 }
-
+ProjectManagementSystem ..> Notifications : uses
+ProjectManagementSystem ..> DevOps : uses
+ProjectManagementSystem ..> VersionControl : uses
+DevOps ..> Notifications : uses
 @enduml
