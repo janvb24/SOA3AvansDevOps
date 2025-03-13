@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AvansDevops")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23af9281c14594072016dc07a2dd19f96ab3dacc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac912d36f7f9d1a154a86f340f269999f471f2c1")]
 [assembly: System.Reflection.AssemblyProductAttribute("AvansDevops")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AvansDevops")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

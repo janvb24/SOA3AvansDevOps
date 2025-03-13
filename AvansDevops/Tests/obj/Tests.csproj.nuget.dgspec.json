@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\AvansDevops\\AvansDevops.csproj": {}
+    "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\Tests\\Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\AvansDevops\\AvansDevops.csproj": {
+    "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\Tests\\Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\AvansDevops\\AvansDevops.csproj",
-        "projectName": "AvansDevops",
-        "projectPath": "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\AvansDevops\\AvansDevops.csproj",
+        "projectUniqueName": "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\Tests\\Tests.csproj",
+        "projectName": "Tests",
+        "projectPath": "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\Tests\\Tests.csproj",
         "packagesPath": "C:\\Users\\janvb\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\AvansDevops\\obj\\",
+        "outputPath": "C:\\Users\\janvb\\Documents\\Jaar 3\\Periode 3\\SO&A 3\\SOA3AvansDevOps\\AvansDevops\\Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\janvb\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,6 +39,28 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.6.0, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.2, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
