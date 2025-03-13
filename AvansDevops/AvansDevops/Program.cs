@@ -1,2 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+
+using AvansDevops.DevOps;
+
+IPipelineBuilder builder = new ConcretePipelineBuilder();
+Pipeline pipeline = builder.Build();
+IPipelineVisitor visitor = new RunPipelineVisitor();
+pipeline.Accept(visitor);
