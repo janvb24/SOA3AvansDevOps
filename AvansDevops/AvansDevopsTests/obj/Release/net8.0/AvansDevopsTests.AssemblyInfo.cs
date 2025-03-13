@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AvansDevopsTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac912d36f7f9d1a154a86f340f269999f471f2c1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39c04b08fc5d34346e2c796df4a194ccfa20f382")]
 [assembly: System.Reflection.AssemblyProductAttribute("AvansDevopsTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AvansDevopsTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
