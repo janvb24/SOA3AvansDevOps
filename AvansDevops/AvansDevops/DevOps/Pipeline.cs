@@ -1,14 +1,15 @@
-﻿namespace AvansDevops.DevOps;
+﻿using AvansDevops.Notifications;
+
+namespace AvansDevops.DevOps;
 
 public class Pipeline : Composite
 {
     
-    /**
-     * TODO: Add notification service
-     */
-    public Pipeline()
+    private readonly INotificationService _notificationService;
+    
+    public Pipeline(INotificationService notificationService)
     {
-        
+        _notificationService = notificationService;
     }
     
     public override bool Accept(IPipelineVisitor visitor)
@@ -16,4 +17,5 @@ public class Pipeline : Composite
         visitor.VisitPipeline(this);
         return base.Accept(visitor);
     }
+    
 }

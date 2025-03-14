@@ -2,7 +2,7 @@
 
 using AvansDevops.DevOps;
 
-IPipelineBuilder builder = new ConcretePipelineBuilder();
-Pipeline pipeline = builder.Build();
+IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
+Pipeline pipeline = pipelineBuilder.Build();
 IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);
