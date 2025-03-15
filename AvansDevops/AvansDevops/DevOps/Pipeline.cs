@@ -15,7 +15,15 @@ public class Pipeline : Composite
     public override bool Accept(IPipelineVisitor visitor)
     {
         visitor.VisitPipeline(this);
-        return base.Accept(visitor);
+        bool succeeded = base.Accept(visitor);
+
+        if (!succeeded)
+        {
+            Console.WriteLine("Pipeline failed");
+            return false;
+        }
+
+        return true;
     }
     
 }
