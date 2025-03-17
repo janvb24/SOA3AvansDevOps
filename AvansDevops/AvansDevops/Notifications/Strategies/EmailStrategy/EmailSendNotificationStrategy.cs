@@ -13,7 +13,7 @@ namespace AvansDevops.Notifications.Strategies.EmailStrategy
 
         public void Send(User user, string message)
         {
-            _adaptor.Send(user.Email, message);
+            _adaptor.Send(user.email, message);
         }
     }
 }
