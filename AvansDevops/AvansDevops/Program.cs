@@ -12,6 +12,7 @@ using AvansDevops.DevOps.UtilityActions;
 // Build and run a CICD pipeline
 IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
 Pipeline pipeline = pipelineBuilder
+    .AddUtilityAction(new CmdUtilityAction("Echo Hello world!"))
     .AddSourceAction(new GitSourceAction("https://github.com/janvb24/SOA3AvansDevOps.git"))
     .AddPackageAction(new NugetPackageAction("https://www.nuget.org/packages/xunit"))
     .AddBuildAction(new DotNetCoreBuildAction())
@@ -19,7 +20,6 @@ Pipeline pipeline = pipelineBuilder
     .AddTestAction(new PublishCodeCoverageResultAction())
     .AddAnalysisAction(new SonarqubeAnalysisAction())
     .AddDeployAction(new AzureDeployAction("https://www.azure.com"))
-    .AddUtilityAction(new CmdUtilityAction("Echo pipeline succeeded"))
     .Build();
 IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);

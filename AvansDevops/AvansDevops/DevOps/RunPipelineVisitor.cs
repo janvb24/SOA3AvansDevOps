@@ -13,7 +13,9 @@ public class RunPipelineVisitor : IPipelineVisitor
     
     public void VisitPipeline(Pipeline pipeline)
     {
-        Console.WriteLine("Running pipeline");
+        Console.WriteLine(!pipeline.succeeded ? 
+            "Pipeline failed!" : 
+            "Pipeline completed without errors");
     }
     
     public bool VisitSourceAction(SourceAction action)

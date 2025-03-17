@@ -4,7 +4,8 @@ namespace AvansDevops.DevOps;
 
 public class Pipeline : Composite
 {
-    
+
+    public bool succeeded { get; private set; }
     private readonly INotificationService _notificationService;
     
     public Pipeline(INotificationService notificationService)
@@ -14,16 +15,9 @@ public class Pipeline : Composite
     
     public override bool Accept(IPipelineVisitor visitor)
     {
+        succeeded = base.Accept(visitor);
         visitor.VisitPipeline(this);
-        bool succeeded = base.Accept(visitor);
-
-        if (!succeeded)
-        {
-            Console.WriteLine("Pipeline failed");
-            return false;
-        }
-
-        return true;
+        return succeeded;
     }
     
 }
