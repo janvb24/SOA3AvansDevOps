@@ -11,9 +11,9 @@ namespace AvansDevopsTests.Notifications {
             service.SetStrategy(strategy);
             List<User> users =
             [
-                new User() { Name = "", Email = "", PhoneNumber = ""},
-                new User() { Name = "", Email = "", PhoneNumber = "" },
-                new User() { Name = "", Email = "", PhoneNumber = "" },
+                new User("", "", ""),
+                new User("", "", ""),
+                new User("", "", ""),
             ];
             string message = "Test message";
 

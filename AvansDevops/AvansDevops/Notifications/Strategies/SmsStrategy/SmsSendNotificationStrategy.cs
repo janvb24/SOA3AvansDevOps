@@ -13,7 +13,7 @@ namespace AvansDevops.Notifications.Strategies.SmsStrategy
 
         public void Send(User user, string message)
         {
-            _adaptor.Send(user.PhoneNumber, message);
+            _adaptor.Send(user.phoneNumber, message);
         }
     }
 }
