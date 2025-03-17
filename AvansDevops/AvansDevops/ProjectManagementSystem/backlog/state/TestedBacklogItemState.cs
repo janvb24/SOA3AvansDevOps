@@ -1,13 +1,18 @@
-﻿using AvansDevops.ProjectManagementSystem.backlog;
+﻿using AvansDevops.Notifications;
+using AvansDevops.ProjectManagementSystem.backlog;
 
 namespace AvansDevops.ProjectManagementSystem.backlog.state
 {
     public class TestedBacklogItemState : IBacklogItemState
     {
         private BacklogItem _backlogItem;
-        public TestedBacklogItemState(BacklogItem backlogItem)
-        {
+        private readonly INotificationService _notificationService;
+        private List<User> _testers;
+
+        public TestedBacklogItemState(BacklogItem backlogItem, INotificationService notificationService, List<User> testers) {
             _backlogItem = backlogItem;
+            _notificationService = notificationService;
+            _testers = testers;
         }
 
         public void Approve()
@@ -25,6 +30,7 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
         {
             Console.WriteLine("Backlog item in tested denied, switched to Ready for testing");
             _backlogItem.currentState = _backlogItem.readyForTestingState;
+            _notificationService.Send(_testers, "Backlog item is denied, switched back to testing");
         }
 
         public void Start()

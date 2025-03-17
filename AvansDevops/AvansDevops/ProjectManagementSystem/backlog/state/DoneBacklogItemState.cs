@@ -12,22 +12,23 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
 
         public void Approve()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Backlog item is already done");
         }
 
         public void Complete()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Backlog item is already done");
+
         }
 
         public void Deny()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Backlog item is already done");
         }
 
         public void Start()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Backlog item is already done");
         }
     }
 }

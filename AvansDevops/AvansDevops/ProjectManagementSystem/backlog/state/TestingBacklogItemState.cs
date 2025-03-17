@@ -32,9 +32,9 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
 
         public void Deny()
         {
-            Console.WriteLine("Backlog item denied, switching to doing");
-            _backlogItem.currentState = _backlogItem.doingState;
-            _notificationService.Send([_scrumMaster], "Backlog item is denied, switch to doing");
+            Console.WriteLine("Backlog item denied, switching to do");
+            _backlogItem.currentState = _backlogItem.todoState;
+            _notificationService.Send([_scrumMaster], "Backlog item is denied, switch to to do");
         }
 
         public void Start()

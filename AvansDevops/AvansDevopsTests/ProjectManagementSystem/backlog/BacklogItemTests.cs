@@ -1,4 +1,6 @@
 ﻿using AvansDevops.ProjectManagementSystem.backlog;
+using AvansDevops.ProjectManagementSystem.backlog.state;
+using AvansDevops.SoftwareConfigurationManagement.GitActions.PushAction;
 
 namespace AvansDevopsTests.ProjectManagementSystem.backlog {
     public class BacklogItemTests {
@@ -104,6 +106,26 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
             // Assert
             Assert.Null(backlogItem.parent);
             Assert.Equal([], backlogItem.subTasks);
+        }
+
+        [Fact]
+        public void StateMethodsCallsMethodFromCurrentState() {
+            // Arrange
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            var stateSub = Substitute.For<IBacklogItemState>();
+            backlogItem.currentState = stateSub;
+
+            // Act
+            backlogItem.Start();
+            backlogItem.Approve();
+            backlogItem.Deny();
+            backlogItem.Complete();
+
+            // Assert
+            stateSub.Received(1).Start();
+            stateSub.Received(1).Approve();
+            stateSub.Received(1).Deny();
+            stateSub.Received(1).Complete();
         }
     }
 }

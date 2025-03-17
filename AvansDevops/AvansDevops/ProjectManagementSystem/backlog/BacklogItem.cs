@@ -77,9 +77,25 @@ namespace AvansDevops.ProjectManagementSystem.backlog
             doingState = new DoingBacklogItemState(this, notificationService, testers);
             readyForTestingState = new ReadyForTestingBacklogItemState(this);
             testingState = new TestingBacklogItemState(this, notificationService, leadDeveloper, scrumMaster);
-            testedState = new TestedBacklogItemState(this);
+            testedState = new TestedBacklogItemState(this, notificationService, testers);
             doneState = new DoneBacklogItemState(this);
             currentState = todoState;
+        }
+
+        public void Start() {
+            currentState.Start();
+        }
+
+        public void Complete() {
+            currentState.Complete();
+        }
+
+        public void Deny() {
+            currentState.Deny();
+        }
+
+        public void Approve() {
+            currentState.Approve();
         }
     }
 }
