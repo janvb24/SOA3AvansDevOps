@@ -1,4 +1,8 @@
-﻿namespace AvansDevops.ProjectManagementSystem.backlog {
+﻿using AvansDevops.Notifications;
+using AvansDevops.ProjectManagementSystem.backlog.state;
+
+namespace AvansDevops.ProjectManagementSystem.backlog
+{
     public abstract class BacklogItem {
         //NOTE: virtual properties are used to allow for overriding in NonEditableBacklogItem so they cannot be altered in NonEditableBacklogItem
         private string _title = string.Empty;
@@ -6,7 +10,14 @@
         private BacklogItem? _parent;
         private List<BacklogItem>? _subTasks = null;
         private User? _developer;
-        //TODO: status/State
+        public TodoBacklogItemState todoState;
+        public DoingBacklogItemState doingState;
+        public ReadyForTestingBacklogItemState readyForTestingState;
+        public TestingBacklogItemState testingState;
+        public TestedBacklogItemState testedState;
+        public DoneBacklogItemState doneState;
+        public IBacklogItemState currentState { get; set; }
+
 
         public virtual string title {
             get => _title;
@@ -33,7 +44,6 @@
                 }   
             }
         }
-
         public virtual BacklogItem? parent {
             get => _parent;
             set {
@@ -56,6 +66,20 @@
                 _subTasks = subTasks ?? [];
                 _parent = null;
             }
+
+            //States
+            //For now the users are hardcoded, but in the future this could be a parameter
+            User leadDeveloper = new User("Lead Developer", "email@email.nl", "063938385");
+            List<User> testers = [new User("Tester", "", ""), new User("Tester", "", "")];
+            User scrumMaster = new User("ScrumMaster", "", "");
+            INotificationService notificationService = new NotificationService();
+            todoState = new TodoBacklogItemState(this);
+            doingState = new DoingBacklogItemState(this, notificationService, testers);
+            readyForTestingState = new ReadyForTestingBacklogItemState(this);
+            testingState = new TestingBacklogItemState(this, notificationService, leadDeveloper, scrumMaster);
+            testedState = new TestedBacklogItemState(this);
+            doneState = new DoneBacklogItemState(this);
+            currentState = todoState;
         }
     }
 }
