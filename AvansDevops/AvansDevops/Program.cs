@@ -1,10 +1,11 @@
-﻿using AvansDevops.ProjectManagementSystem;
+using AvansDevops.ProjectManagementSystem;
 using AvansDevops.ProjectManagementSystem.backlog;
 using AvansDevops.SoftwareConfigurationManagement;
 using AvansDevops.SoftwareConfigurationManagement.GitActions.BranchAction;
 using AvansDevops.SoftwareConfigurationManagement.GitActions.CommitAction;
 using AvansDevops.SoftwareConfigurationManagement.GitActions.FetchAction;
 using AvansDevops.SoftwareConfigurationManagement.GitActions.PushAction;
+using AvansDevops.DevOps;
 
 //Users
 User developer = new User("Jan", "jan@email.nl", "0638475686");
@@ -25,4 +26,9 @@ backlogItem.subTasks.Add(new EditableBacklogItem("Add User domain model class", 
 backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developer, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developer, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
+
+IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
+Pipeline pipeline = pipelineBuilder.Build();
+IPipelineVisitor visitor = new RunPipelineVisitor();
+pipeline.Accept(visitor);
 
