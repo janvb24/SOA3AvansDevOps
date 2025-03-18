@@ -60,7 +60,7 @@ namespace AvansDevops.ProjectManagementSystem.backlog
         protected BacklogItem(string title, int storyPoints, User? developer, User tester, User scrumMaster, List<BacklogItem>? subTasks = null, BacklogItem? parent = null) {
             _title = title;               
             _storyPoints = storyPoints;
-            this.developer = developer ?? new User("dev", "dev@dev.nl", "phone"); //Temp because developer can
+            this.developer = developer;
             if (parent != null) {
                 _subTasks = null;
                 _parent = parent;
