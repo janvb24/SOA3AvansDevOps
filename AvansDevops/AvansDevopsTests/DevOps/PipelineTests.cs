@@ -6,20 +6,6 @@ namespace AvansDevopsTests.DevOps;
 public class PipelineTests
 {
     [Fact]
-    public void ShouldAcceptVisitor()
-    {
-        // Arrange
-        var pipeline = new Pipeline(new NotificationService());
-        var visitor = Substitute.For<IPipelineVisitor>();
-        
-        // Act
-        pipeline.Accept(visitor);
-        
-        // Assert
-        visitor.Received(1).VisitPipeline(pipeline);
-    }
-
-    [Fact]
     public void ShouldReturnFalseWhenActionFailed()
     {
         // Arrange
@@ -33,6 +19,7 @@ public class PipelineTests
         var result = pipeline.Accept(visitor);
         
         // Assert
+        visitor.Received(1).VisitPipeline(pipeline);
         Assert.False(result);
     }
     
@@ -42,14 +29,15 @@ public class PipelineTests
         // Arrange
         var pipeline = new Pipeline(new NotificationService());
         var visitor = Substitute.For<IPipelineVisitor>();
-        var failedAction = Substitute.For<Component>();
-        failedAction.Accept(visitor).Returns(true);
-        pipeline.Add(failedAction);
+        var succeededAction = Substitute.For<Component>();
+        succeededAction.Accept(visitor).Returns(true);
+        pipeline.Add(succeededAction);
         
         // Act
         var result = pipeline.Accept(visitor);
         
         // Assert
+        visitor.Received(1).VisitPipeline(pipeline);
         Assert.True(result);
     }
 }
