@@ -8,7 +8,10 @@ using AvansDevops.SoftwareConfigurationManagement.GitActions.PushAction;
 using AvansDevops.DevOps;
 
 //Users
-User developer = new User("Jan", "jan@email.nl", "0638475686");
+User developer = new User("dev", "dev@email.nl", "0638475686");
+User tester = new User("test", "test@email.nl", "0638475686");
+User scrumMaster = new User("scrum", "scrum@email.nl", "0638475686");
+
 
 //Version Control
 IGitVersionControl versionControl = new GitVersionControl(
@@ -20,11 +23,11 @@ IGitVersionControl versionControl = new GitVersionControl(
 
 //Project with backlog
 Project project = new(versionControl, developer);
-project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1));
-var backlogItem = new EditableBacklogItem("Add domain model", 8, developer);
-backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developer, null, backlogItem));
-backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developer, null, backlogItem));
-backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developer, null, backlogItem));
+project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1, developer, tester, scrumMaster));
+var backlogItem = new EditableBacklogItem("Add domain model", 8, developer, tester, scrumMaster);
+backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developer, tester, scrumMaster, null, backlogItem));
+backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developer, tester, scrumMaster, null, backlogItem));
+backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developer, tester, scrumMaster, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
 
 //Backlog state

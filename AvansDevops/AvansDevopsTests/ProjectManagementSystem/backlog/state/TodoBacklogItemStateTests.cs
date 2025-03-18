@@ -1,12 +1,15 @@
 ﻿using AvansDevops.ProjectManagementSystem.backlog.state;
 using AvansDevops.ProjectManagementSystem.backlog;
+using AvansDevops.ProjectManagementSystem;
 
 namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
     public class TodoBacklogItemStateTests {
+        User tester = new("", "", "");
+        User scrumMaster = new("", "", "");
         [Fact]
         public void ApproveDoesNotChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
             var state = new TodoBacklogItemState(backlogItem);
             backlogItem.currentState = state;
 
@@ -20,7 +23,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
         [Fact]
         public void CompleteDoesNotChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
             var state = new TodoBacklogItemState(backlogItem);
             backlogItem.currentState = state;
 
@@ -34,7 +37,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
         [Fact]
         public void DenyDoesNotChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
             var state = new TodoBacklogItemState(backlogItem);
             backlogItem.currentState = state;
 
@@ -48,7 +51,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
         [Fact]
         public void StartDoesChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
             var state = new TodoBacklogItemState(backlogItem);
             backlogItem.currentState = state;
 

@@ -5,13 +5,14 @@ using AvansDevops.ProjectManagementSystem.backlog.state;
 
 namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
     public class TestingBacklogItemStateTests {
+        User tester = new("", "", "");
+        User scrumMaster = new("", "", "");
         [Fact]
         public void ApproveDoesNotChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
-            var notificationService = NSubstitute.Substitute.For<INotificationService>();
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            var notificationService = Substitute.For<INotificationService>();
             User leadDeveloper = new User("", "", "");
-            User scrumMaster = new User("", "", "");
             var state = new TestingBacklogItemState(backlogItem, notificationService, leadDeveloper, scrumMaster);
             backlogItem.currentState = state;
 
@@ -25,10 +26,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
         [Fact]
         public void CompleteDoesChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
-            var notificationService = NSubstitute.Substitute.For<INotificationService>();
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            var notificationService = Substitute.For<INotificationService>();
             User leadDeveloper = new User("", "", "");
-            User scrumMaster = new User("", "", "");
             var state = new TestingBacklogItemState(backlogItem, notificationService, leadDeveloper, scrumMaster);
             backlogItem.currentState = state;
 
@@ -44,10 +44,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
         [Fact]
         public void DenyDoesChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
-            var notificationService = NSubstitute.Substitute.For<INotificationService>();
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            var notificationService = Substitute.For<INotificationService>();
             User leadDeveloper = new User("", "", "");
-            User scrumMaster = new User("", "", "");
             var state = new TestingBacklogItemState(backlogItem, notificationService, leadDeveloper, scrumMaster);
             backlogItem.currentState = state;
 
@@ -62,10 +61,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog.state {
         [Fact]
         public void StartDoesNotChangeCurrentState() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
-            var notificationService = NSubstitute.Substitute.For<INotificationService>();
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            var notificationService = Substitute.For<INotificationService>();
             User leadDeveloper = new User("", "", "");
-            User scrumMaster = new User("", "", "");
             var state = new TestingBacklogItemState(backlogItem, notificationService, leadDeveloper, scrumMaster);
             backlogItem.currentState = state;
 

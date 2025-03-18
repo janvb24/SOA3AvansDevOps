@@ -18,7 +18,6 @@ namespace AvansDevops.ProjectManagementSystem.backlog
         public DoneBacklogItemState doneState;
         public IBacklogItemState currentState { get; set; }
 
-
         public virtual string title {
             get => _title;
             set => _title = value;
@@ -27,11 +26,6 @@ namespace AvansDevops.ProjectManagementSystem.backlog
         public virtual int storyPoints {
             get => _storyPoints;
             set => _storyPoints = value;
-        }
-
-        public virtual User? developer {
-            get => _developer;
-            set => _developer = value;
         }
 
         public virtual List<BacklogItem>? subTasks {
@@ -55,10 +49,18 @@ namespace AvansDevops.ProjectManagementSystem.backlog
             }
         }
 
-        protected BacklogItem(string title, int storyPoints, User? developer = null, List<BacklogItem>? subTasks = null, BacklogItem? parent = null) {
+        public virtual User? developer {
+            get => _developer;
+            set {
+                this.testingState?.UpdateDeveloper(value);
+                _developer = value;
+            }
+        }
+
+        protected BacklogItem(string title, int storyPoints, User? developer, User tester, User scrumMaster, List<BacklogItem>? subTasks = null, BacklogItem? parent = null) {
             _title = title;               
             _storyPoints = storyPoints;
-            _developer = developer;
+            this.developer = developer ?? new User("dev", "dev@dev.nl", "phone"); //Temp because developer can
             if (parent != null) {
                 _subTasks = null;
                 _parent = parent;
@@ -68,16 +70,12 @@ namespace AvansDevops.ProjectManagementSystem.backlog
             }
 
             //States
-            //For now the users are hardcoded, but in the future this could be a parameter
-            User leadDeveloper = new User("Lead Developer", "email@email.nl", "063938385");
-            List<User> testers = [new User("Tester", "", ""), new User("Tester", "", "")];
-            User scrumMaster = new User("ScrumMaster", "", "");
             INotificationService notificationService = new NotificationService();
             todoState = new TodoBacklogItemState(this);
-            doingState = new DoingBacklogItemState(this, notificationService, testers);
+            doingState = new DoingBacklogItemState(this, notificationService, tester);
             readyForTestingState = new ReadyForTestingBacklogItemState(this);
-            testingState = new TestingBacklogItemState(this, notificationService, leadDeveloper, scrumMaster);
-            testedState = new TestedBacklogItemState(this, notificationService, testers);
+            testingState = new TestingBacklogItemState(this, notificationService, this.developer, scrumMaster);
+            testedState = new TestedBacklogItemState(this, notificationService, tester);
             doneState = new DoneBacklogItemState(this);
             currentState = todoState;
         }
