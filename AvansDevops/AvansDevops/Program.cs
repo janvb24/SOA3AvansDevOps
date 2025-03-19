@@ -13,6 +13,11 @@ using AvansDevops.DevOps.PackageActions;
 using AvansDevops.DevOps.SourceActions;
 using AvansDevops.DevOps.TestActions;
 using AvansDevops.DevOps.UtilityActions;
+using AvansDevops.ProjectManagementSystem.forum;
+using AvansDevops.Notifications;
+
+//Notification service
+INotificationService notificationService = new NotificationService();
 
 //Users
 User developer = new User("Jan", "jan@email.nl", "0638475686");
@@ -29,10 +34,18 @@ IGitVersionControl versionControl = new GitVersionControl(
 Project project = new(versionControl);
 project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1));
 var backlogItem = new EditableBacklogItem("Add domain model", 8, developer);
-backlogItem.subTasks.Add(new EditableBacklogItem("Add User domain model class", 5, developer, null, backlogItem));
+backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developer, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developer, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developer, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
+
+//Forum
+ForumTread tread = new ForumTread(notificationService, developer);
+tread.items.Add(new ForumTreadItem("Item 1", developer));
+tread.items[0].nextTreadItem = new ForumTreadItem("new item after item 1", developer);
+tread.items[0].nextTreadItem = new ForumTreadItem("extra new content", developer);
+project.forum.newTread(tread);
+Console.WriteLine(tread.items[0]);
 
 // Build and run a CICD pipeline
 IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
