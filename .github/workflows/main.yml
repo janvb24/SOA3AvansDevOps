@@ -24,21 +24,16 @@ jobs:
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v2
 
+      # Install code coverage tool
+      - name: Install dotnet-coverage tool
+        run: dotnet tool install --global dotnet-coverage
+
       # Run tests and collect code coverage
       - name: Run tests with code coverage
         working-directory: AvansDevops
         run: |
-          dotnet test --collect:"XPlat Code Coverage" --results-directory TestResults
+          dotnet-coverage collect 'dotnet test --no-build' --output 'coverage.cobertura.xml' --format 'cobertura'
 
-      # Convert coverage report to OpenCover format
-      - name: Convert coverage report to OpenCover format
-        working-directory: AvansDevops
-        run: |
-          foreach ($file in Get-ChildItem -Path TestResults -Filter "*.coverage") {
-            $output = $file.FullName.Replace(".coverage", ".opencover.xml")
-            & "C:\Program Files\dotnet\dotnet.exe" tool install --global dotnet-reportgenerator-globaltool
-            & "C:\Users\runneradmin\.dotnet\tools\reportgenerator.exe" "-reports:$($file.FullName)" "-targetdir:TestResults" "-reporttypes:opencover"
-          }
 
   SonarCloud:
     name: Analyze using SonarCloud
@@ -82,6 +77,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: AvansDevops
         run: |
-          ../.sonar/scanner/dotnet-sonarscanner begin /k:"janvb24_SOA3AvansDevOps" /o:"janvb24" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="TestResults/*.opencover.xml"
-          dotnet build
-          ../.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+            ../.sonar/scanner/dotnet-sonarscanner begin /k:"janvb24_SOA3AvansDevOps" /o:"janvb24" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="coverage.cobertura.xml"
+            dotnet build
+            ../.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}""
