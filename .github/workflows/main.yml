@@ -71,6 +71,7 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
 
       - name: test
+        working-directory: AvansDevops
         run: ls
 
 
