@@ -80,18 +80,30 @@ namespace AvansDevops.ProjectManagementSystem.backlog
             currentState = todoState;
         }
 
+        /// <summary>
+        /// Runs start method from current state
+        /// </summary>
         public void Start() {
             currentState.Start();
         }
 
+        /// <summary>
+        /// Runs complete method from current state
+        /// </summary>
         public void Complete() {
             currentState.Complete();
         }
 
+        /// <summary>
+        /// Runs approve method from current state
+        /// </summary>
         public void Deny() {
             currentState.Deny();
         }
 
+        /// <summary>
+        /// Runs approve method from current state
+        /// </summary>
         public void Approve() {
             currentState.Approve();
         }
