@@ -2,7 +2,7 @@
 
 namespace AvansDevops.DevOps;
 
-public class Pipeline : Composite
+public class Pipeline : Composite, IPipeline
 {
 
     public bool succeeded { get; private set; }
@@ -19,5 +19,9 @@ public class Pipeline : Composite
         visitor.VisitPipeline(this);
         return succeeded;
     }
-    
+
+    public List<Component> GetActions()
+    {
+        return parts;
+    }
 }

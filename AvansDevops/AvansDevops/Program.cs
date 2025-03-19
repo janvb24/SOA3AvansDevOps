@@ -48,4 +48,3 @@ Pipeline pipeline = pipelineBuilder
     .Build();
 IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);
-
