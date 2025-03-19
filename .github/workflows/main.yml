@@ -5,9 +5,45 @@ on:
       - main
 
 jobs:
-  Test:
+  # Test:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+
+  #     # Install the .NET Core SDK
+  #     - name: Install .NET Core
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: 8.0.x
+
+  #     # Build the solution
+  #     - name: Build the solution
+  #       run: dotnet build ./AvansDevops/AvansDevops.sln
+
+  #     # Install code coverage tool
+  #     - name: Install dotnet-coverage tool
+  #       run: dotnet tool install --global dotnet-coverage
+
+  #     # Run tests and collect code coverage
+  #     - name: Run tests with code coverage
+  #       working-directory: AvansDevops
+  #       run: |
+  #         dotnet-coverage collect --output "coverage.cobertura.xml" --output-format "cobertura" -- dotnet test --no-build
+
+  SonarCloud:
+    name: Analyze using SonarCloud
+    needs: [Test]
     runs-on: windows-latest
     steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -33,21 +69,6 @@ jobs:
         run: |
           dotnet-coverage collect --output "coverage.cobertura.xml" --output-format "cobertura" -- dotnet test --no-build
 
-  SonarCloud:
-    name: Analyze using SonarCloud
-    needs: [Test]
-    runs-on: windows-latest
-    steps:
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'zulu'
-
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
