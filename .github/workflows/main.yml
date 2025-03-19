@@ -26,11 +26,13 @@ jobs:
 
       # Run tests and collect code coverage
       - name: Run tests with code coverage
+        working-directory: AvansDevops
         run: |
           dotnet test --collect:"XPlat Code Coverage" --results-directory TestResults
 
-      # Convert coverage report to opencover format
-      - name: Convert coverage report to opencover format
+      # Convert coverage report to OpenCover format
+      - name: Convert coverage report to OpenCover format
+        working-directory: AvansDevops
         run: |
           foreach ($file in Get-ChildItem -Path TestResults -Filter "*.coverage") {
             $output = $file.FullName.Replace(".coverage", ".opencover.xml")
@@ -78,7 +80,8 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        working-directory: AvansDevops
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"janvb24_SOA3AvansDevOps" /o:"janvb24" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="TestResults/*.opencover.xml"
+          ../.sonar/scanner/dotnet-sonarscanner begin /k:"janvb24_SOA3AvansDevOps" /o:"janvb24" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="TestResults/*.opencover.xml"
           dotnet build
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          ../.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
