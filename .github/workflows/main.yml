@@ -35,7 +35,7 @@ jobs:
 
   SonarCloud:
     name: Analyze using SonarCloud
-    needs: [Test]
+    # needs: [Test]
     runs-on: windows-latest
     steps:
       - name: Set up JDK 17
@@ -68,7 +68,6 @@ jobs:
         working-directory: AvansDevops
         run: |
           dotnet-coverage collect --output "coverage.cobertura.xml" --output-format "cobertura" -- dotnet test --no-build
-
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
