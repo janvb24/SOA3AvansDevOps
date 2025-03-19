@@ -32,8 +32,7 @@ jobs:
       - name: Run tests with code coverage
         working-directory: AvansDevops
         run: |
-          dotnet-coverage collect 'dotnet test --no-build' --output 'coverage.cobertura.xml' --format 'cobertura'
-
+          dotnet-coverage collect --output "coverage.cobertura.xml" --output-format "cobertura" -- dotnet test --no-build
 
   SonarCloud:
     name: Analyze using SonarCloud
