@@ -20,7 +20,10 @@ using AvansDevops.Notifications;
 INotificationService notificationService = new NotificationService();
 
 //Users
-User developer = new User("Jan", "jan@email.nl", "0638475686");
+User developer = new User("dev", "dev@email.nl", "0638475686");
+User tester = new User("test", "test@email.nl", "0638475686");
+User scrumMaster = new User("scrum", "scrum@email.nl", "0638475686");
+
 
 //Version Control
 IGitVersionControl versionControl = new GitVersionControl(
@@ -46,6 +49,21 @@ tread.items[0].nextTreadItem = new ForumTreadItem("new item after item 1", devel
 tread.items[0].nextTreadItem = new ForumTreadItem("extra new content", developer);
 project.forum.newTread(tread);
 Console.WriteLine(tread.items[0]);
+
+
+//Backlog state
+backlogItem.currentState.Start(); //TODO --> DOINT
+backlogItem.currentState.Complete(); //DOING --> READY FOR TESTING
+backlogItem.currentState.Start(); //READY FOR TESTING --> TESTING
+backlogItem.currentState.Deny(); //TESTING --> TODO
+backlogItem.currentState.Start(); //TODO --> DOING
+backlogItem.currentState.Complete(); //DOING --> READY FOR TESTING
+backlogItem.currentState.Start(); //READY FOR TESTING --> TESTING
+backlogItem.currentState.Complete(); //TESTING --> TESTED 
+backlogItem.currentState.Deny(); //TESTED --> ReadyForTesting 
+backlogItem.currentState.Start(); //READY FOR TESTING --> TESTING
+backlogItem.currentState.Complete(); //TESTING --> TESTED 
+backlogItem.currentState.Approve(); //TESTED --> DONE
 
 // Build and run a CICD pipeline
 IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
