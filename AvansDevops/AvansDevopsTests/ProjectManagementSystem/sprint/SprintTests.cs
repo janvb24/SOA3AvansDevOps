@@ -13,7 +13,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -31,7 +32,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -46,7 +48,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -64,7 +67,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -79,17 +83,18 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = true;
         
         // Act
-        sprint.project = new Project(git);
+        sprint.project = new Project(git, leadDev);
         
         // Assert
-        Assert.Equivalent(new Project(git), sprint.project, true);
+        Assert.Equivalent(new Project(git, leadDev), sprint.project, true);
     }
     
     [Fact]
@@ -97,14 +102,15 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = false;
 
         // Assert
-        Assert.Throws<ArgumentException>(() => sprint.project = new Project(git));
+        Assert.Throws<ArgumentException>(() => sprint.project = new Project(git, leadDev));
     }
     
     [Fact]
@@ -112,10 +118,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
-        User scrumMaster = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
+        var scrumMaster = new User("", "", "");
+        var tester = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
-        BacklogItem backlogItem = new EditableBacklogItem("", 0);
+        BacklogItem backlogItem = new BacklogItemMock("", 0, tester, scrumMaster);
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = true;
         
@@ -132,10 +140,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
-        User scrumMaster = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
+        var scrumMaster = new User("", "", "");
+        var tester = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
-        BacklogItem backlogItem = new EditableBacklogItem("", 0);
+        BacklogItem backlogItem = new BacklogItemMock("", 0, tester, scrumMaster);
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = false;
         
@@ -148,7 +158,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -166,7 +177,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -181,7 +193,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -199,7 +212,8 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         User scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -214,12 +228,14 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
-        User scrumMaster = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
+        var scrumMaster = new User("", "", "");
+        var tester = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
-        BacklogItem parentBacklogItem = new EditableBacklogItem("", 0);
-        BacklogItem childBacklogItem = new EditableBacklogItem("", 0, parent: parentBacklogItem);
+        BacklogItem parentBacklogItem = new BacklogItemMock("", 0, tester, scrumMaster);
+        BacklogItem childBacklogItem = new BacklogItemMock("", 0, tester, scrumMaster, parent: parentBacklogItem);
         
         // Assert
         Assert.Throws<ArgumentException>(() => sprint.AddToBacklog(childBacklogItem));
@@ -230,11 +246,13 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
-        User scrumMaster = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
+        var scrumMaster = new User("", "", "");
+        var tester = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
-        BacklogItem backlogItem = new EditableBacklogItem("", 0);
+        BacklogItem backlogItem = new BacklogItemMock("", 0, tester, scrumMaster);
         
         // Act
         sprint.AddToBacklog(backlogItem);
@@ -249,13 +267,15 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        Project project = new Project(git);
-        User scrumMaster = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
+        var scrumMaster = new User("", "", "");
+        var tester = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
-        BacklogItem backlogItem1 = new EditableBacklogItem("", 0);
-        BacklogItem backlogItem2 = new EditableBacklogItem("", 0);
-        BacklogItem backlogItem3 = new EditableBacklogItem("", 0);
+        BacklogItem backlogItem1 = new BacklogItemMock("", 0, tester, scrumMaster);
+        BacklogItem backlogItem2 = new BacklogItemMock("", 0, tester, scrumMaster);
+        BacklogItem backlogItem3 = new BacklogItemMock("", 0, tester, scrumMaster);
         List<BacklogItem> expected = [backlogItem1, backlogItem2, backlogItem3]; 
         
         // Act
@@ -272,6 +292,14 @@ public class SprintTests
     {
         public SprintMock(Project project, User scrumMaster, IPipeline pipeline, string name) : 
             base(project, scrumMaster, pipeline, name)
+        {
+        }
+    }
+
+    private class BacklogItemMock : BacklogItem
+    {
+        public BacklogItemMock(string title, int storyPoints, User tester, User scrumMaster, User? developer = null, List<BacklogItem>? subTasks = null, BacklogItem? parent = null) : 
+            base(title, storyPoints, developer, tester, scrumMaster, subTasks, parent)
         {
         }
     }

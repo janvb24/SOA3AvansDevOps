@@ -13,7 +13,8 @@ public class DoingSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        var project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         var user = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
         var sprint = new SprintMock(project, user, pipeline, "");
@@ -31,7 +32,8 @@ public class DoingSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        var project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         var user = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
         var sprint = new SprintMock(project, user, pipeline, "");

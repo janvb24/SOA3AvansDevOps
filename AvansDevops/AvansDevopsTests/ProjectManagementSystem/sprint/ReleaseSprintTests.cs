@@ -14,7 +14,8 @@ public class ReleaseSprintTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        var project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         var user = new User("name", "email", "phoneNumber");
         var pipeline = Substitute.For<IPipeline>();
         var deployAction = Substitute.For<DeployAction>("url");
@@ -32,7 +33,8 @@ public class ReleaseSprintTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        var project = new Project(git);
+        var leadDev = new User("", "", "");
+        var project = new Project(git, leadDev);
         var user = new User("name", "email", "phoneNumber");
         var pipeline = Substitute.For<IPipeline>();
         var testAction = Substitute.For<TestAction>();

@@ -1,11 +1,15 @@
-﻿using AvansDevops.ProjectManagementSystem.backlog;
+﻿using AvansDevops.ProjectManagementSystem;
+using AvansDevops.ProjectManagementSystem.backlog;
+using System.Diagnostics.Metrics;
 
 namespace AvansDevopsTests.ProjectManagementSystem.backlog {
     public class NonEditableBacklogItemTests {
+        User tester = new("", "", "");
+        User scrumMaster = new("", "", "");
         [Fact]
         public void TestChangePropertyTitleInNonEditableBacklogItem() {
             // Arrange
-            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1);
+            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Act
             Exception? e = null;
@@ -24,7 +28,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
         [Fact]
         public void TestChangePropertyStoryPointsInNonEditableBacklogItem() {
             // Arrange
-            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1);
+            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Act
             Exception? e = null;
@@ -43,7 +47,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
         [Fact]
         public void TestChangePropertSubTasksInNonEditableBacklogItem() {
             // Arrange
-            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1);
+            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Act
             Exception? e = null;
@@ -62,12 +66,12 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
         [Fact]
         public void TestChangePropertParentInNonEditableBacklogItem() {
             // Arrange
-            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1);
+            BacklogItem nonEditableBacklogItem = new NonEditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Act
             Exception? e = null;
             try {
-                nonEditableBacklogItem.parent = new EditableBacklogItem("",1);
+                nonEditableBacklogItem.parent = new EditableBacklogItem("",1, null, tester, scrumMaster);
             } catch (ArgumentException ex) {
                 e = ex;
             }
