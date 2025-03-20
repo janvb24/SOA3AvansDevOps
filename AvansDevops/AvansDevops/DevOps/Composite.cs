@@ -3,11 +3,11 @@
 public class Composite : Component
 {
     
-    private readonly List<Component> _parts = [];
+    protected readonly List<Component> parts = [];
     
     public override bool Accept(IPipelineVisitor visitor)
     {
-        return _parts.All(part => part.Accept(visitor));
+        return parts.All(part => part.Accept(visitor));
     }
 
     /// <summary>
@@ -16,7 +16,7 @@ public class Composite : Component
     /// <param name="component">A new action</param>
     public void Add(Component component)
     {
-        _parts.Add(component);
+        parts.Add(component);
     }
     
     /// <summary>
@@ -26,7 +26,7 @@ public class Composite : Component
     /// <returns>The action in the pipeline</returns>
     public Component GetChild(int index)
     {
-        return _parts[index];
+        return parts[index];
     }
     
 }
