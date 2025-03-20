@@ -63,7 +63,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: AvansDevops
         run: |
-            ../.sonar/scanner/dotnet-sonarscanner begin /k:"janvb24_SOA3AvansDevOps" /o:"janvb24" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml"
+            ../.sonar/scanner/dotnet-sonarscanner begin /k:"janvb24_SOA3AvansDevOps" /o:"janvb24" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
             dotnet build --no-incremental
             dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
             ../.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
