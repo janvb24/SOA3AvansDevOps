@@ -1,10 +1,10 @@
 ﻿namespace AvansDevops.ProjectManagementSystem.backlog {
     public class NonEditableBacklogItem : BacklogItem{
-        public NonEditableBacklogItem(string title, int storyPoints, User? developer = null, List<BacklogItem>? subTasks = null, BacklogItem? parent = null)
-            : base(title, storyPoints, developer, subTasks, parent) { }
+        public NonEditableBacklogItem(string title, int storyPoints, User? developer, User tester, User scrumMaster, List<BacklogItem>? subTasks = null, BacklogItem? parent = null)
+            : base(title, storyPoints, developer, tester, scrumMaster, subTasks, parent) { }
 
-        public NonEditableBacklogItem(EditableBacklogItem editableBacklogItem)
-            : base(editableBacklogItem.title, editableBacklogItem.storyPoints, editableBacklogItem.developer, editableBacklogItem.subTasks, editableBacklogItem.parent) { }
+        public NonEditableBacklogItem(EditableBacklogItem editableBacklogItem, User tester, User scrumMaster)
+            : base(editableBacklogItem.title, editableBacklogItem.storyPoints, editableBacklogItem.developer, tester, scrumMaster, editableBacklogItem.subTasks, editableBacklogItem.parent) { }
 
         // Override setters to prevent modification
         public override string title {

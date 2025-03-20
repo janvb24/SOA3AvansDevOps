@@ -1,12 +1,17 @@
-﻿using AvansDevops.ProjectManagementSystem.backlog;
+﻿using AvansDevops.ProjectManagementSystem;
+using AvansDevops.ProjectManagementSystem.backlog;
+using AvansDevops.ProjectManagementSystem.backlog.state;
+using AvansDevops.SoftwareConfigurationManagement.GitActions.PushAction;
 
 namespace AvansDevopsTests.ProjectManagementSystem.backlog {
     public class BacklogItemTests {
+        User tester = new("", "", "");
+        User scrumMaster = new("", "", "");
         [Fact]
         public void SubTaskCannotBeSetIfParentHasValue() {
             // Arrange
-            BacklogItem parent = new EditableBacklogItem("Title", 1);
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, parent: parent);
+            BacklogItem parent = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster, parent: parent);
 
             // Act
             Exception? e = null;
@@ -25,7 +30,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
         [Fact]
         public void SubTaskCanBeSetIfParentHasNoValue() {
             // Arrange
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Act
             Exception? e = null;
@@ -43,8 +48,8 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
         [Fact]
         public void ParentCannotBeSetIfSubTaskHasValue() {
             // Arrange
-            BacklogItem parent = new EditableBacklogItem("Title", 1);
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            BacklogItem parent = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Act
             Exception? e = null;
@@ -63,9 +68,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
         [Fact]
         public void ParentCanBeSetIfSubTaskHasNoValue() {
             // Arrange
-            BacklogItem parent = new EditableBacklogItem("Title", 1);
-            BacklogItem parentNew = new EditableBacklogItem("Title", 1);
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, parent: parent);
+            BacklogItem parent = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            BacklogItem parentNew = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster, parent: parent);
 
 
             // Act
@@ -84,10 +89,10 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
         [Fact]
         public void ConstructorMakesSubTasksNullIfParentHasValue() {
             // Arrange
-            BacklogItem parent = new EditableBacklogItem("Title", 1);
+            BacklogItem parent = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Act
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, parent: parent);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster, parent: parent);
 
             // Assert
             Assert.Equal(parent, backlogItem.parent);
@@ -99,11 +104,31 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
             // Arrange
 
             // Act
-            BacklogItem backlogItem = new EditableBacklogItem("Title", 1);
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
 
             // Assert
             Assert.Null(backlogItem.parent);
             Assert.Equal([], backlogItem.subTasks);
+        }
+
+        [Fact]
+        public void StateMethodsCallsMethodFromCurrentState() {
+            // Arrange
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            var stateSub = Substitute.For<IBacklogItemState>();
+            backlogItem.currentState = stateSub;
+
+            // Act
+            backlogItem.Start();
+            backlogItem.Approve();
+            backlogItem.Deny();
+            backlogItem.Complete();
+
+            // Assert
+            stateSub.Received(1).Start();
+            stateSub.Received(1).Approve();
+            stateSub.Received(1).Deny();
+            stateSub.Received(1).Complete();
         }
     }
 }
