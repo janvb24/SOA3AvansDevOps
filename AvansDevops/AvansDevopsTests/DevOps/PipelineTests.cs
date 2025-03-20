@@ -1,4 +1,7 @@
 ﻿using AvansDevops.DevOps;
+using AvansDevops.DevOps.BuildActions;
+using AvansDevops.DevOps.PackageActions;
+using AvansDevops.DevOps.TestActions;
 using AvansDevops.Notifications;
 
 namespace AvansDevopsTests.DevOps;
@@ -9,7 +12,8 @@ public class PipelineTests
     public void ShouldReturnFalseWhenActionFailed()
     {
         // Arrange
-        var pipeline = new Pipeline(new NotificationService());
+        var notificationService = Substitute.For<INotificationService>();
+        var pipeline = new Pipeline(notificationService);
         var visitor = Substitute.For<IPipelineVisitor>();
         var failedAction = Substitute.For<Component>();
         failedAction.Accept(visitor).Returns(false);
@@ -27,7 +31,8 @@ public class PipelineTests
     public void ShouldReturnTrueWhenActionSucceeded()
     {
         // Arrange
-        var pipeline = new Pipeline(new NotificationService());
+        var notificationService = Substitute.For<INotificationService>();
+        var pipeline = new Pipeline(notificationService);
         var visitor = Substitute.For<IPipelineVisitor>();
         var succeededAction = Substitute.For<Component>();
         succeededAction.Accept(visitor).Returns(true);
@@ -39,5 +44,24 @@ public class PipelineTests
         // Assert
         visitor.Received(1).VisitPipeline(pipeline);
         Assert.True(result);
+    }
+
+    [Fact]
+    public void ShouldReturnListOfActions()
+    {
+        // Arrange
+        var notificationService = Substitute.For<INotificationService>();
+        var pipeline = new Pipeline(notificationService);
+        var testAction = Substitute.For<TestAction>();
+        var buildAction = Substitute.For<BuildAction>();
+        pipeline.Add(testAction);
+        pipeline.Add(buildAction);
+        List<Component> expected = [testAction, buildAction];
+
+        // Act
+        var results = pipeline.GetActions();
+
+        // Assert
+        Assert.Equivalent(expected, results, true);
     }
 }

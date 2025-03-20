@@ -15,6 +15,7 @@ using AvansDevops.DevOps.TestActions;
 using AvansDevops.DevOps.UtilityActions;
 using AvansDevops.ProjectManagementSystem.forum;
 using AvansDevops.Notifications;
+using AvansDevops.ProjectManagementSystem.sprint;
 
 //Notification service
 INotificationService notificationService = new NotificationService();
@@ -23,7 +24,6 @@ INotificationService notificationService = new NotificationService();
 User developer = new User("dev", "dev@email.nl", "0638475686");
 User tester = new User("test", "test@email.nl", "0638475686");
 User scrumMaster = new User("scrum", "scrum@email.nl", "0638475686");
-
 
 //Version Control
 IGitVersionControl versionControl = new GitVersionControl(
@@ -49,7 +49,6 @@ tread.items[0].nextTreadItem = new ForumTreadItem("new item after item 1", devel
 tread.items[0].nextTreadItem = new ForumTreadItem("extra new content", developer);
 project.forum.newTread(tread);
 Console.WriteLine(tread.items[0]);
-
 
 //Backlog state
 backlogItem.currentState.Start(); //TODO --> DOINT
@@ -80,3 +79,6 @@ Pipeline pipeline = pipelineBuilder
 IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);
 
+// Sprint
+project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
+project.currentSprint.AddToBacklog(backlogItem);
