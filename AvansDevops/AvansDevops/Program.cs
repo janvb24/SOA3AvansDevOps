@@ -13,12 +13,12 @@ using AvansDevops.DevOps.PackageActions;
 using AvansDevops.DevOps.SourceActions;
 using AvansDevops.DevOps.TestActions;
 using AvansDevops.DevOps.UtilityActions;
+using AvansDevops.ProjectManagementSystem.sprint;
 
 //Users
 User developer = new User("dev", "dev@email.nl", "0638475686");
 User tester = new User("test", "test@email.nl", "0638475686");
 User scrumMaster = new User("scrum", "scrum@email.nl", "0638475686");
-
 
 //Version Control
 IGitVersionControl versionControl = new GitVersionControl(
@@ -36,7 +36,6 @@ backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class",
 backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developer, tester, scrumMaster, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developer, tester, scrumMaster, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
-
 
 //Backlog state
 backlogItem.currentState.Start(); //TODO --> DOINT
@@ -67,3 +66,6 @@ Pipeline pipeline = pipelineBuilder
 IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);
 
+// Sprint
+project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
+project.currentSprint.AddToBacklog(backlogItem);
