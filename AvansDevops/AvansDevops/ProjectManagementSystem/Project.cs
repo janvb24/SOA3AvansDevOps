@@ -1,6 +1,7 @@
-﻿using AvansDevops.DevOps;
+using AvansDevops.DevOps;
 using AvansDevops.ProjectManagementSystem.backlog;
 using AvansDevops.ProjectManagementSystem.sprint;
+using AvansDevops.ProjectManagementSystem.forum;
 using AvansDevops.SoftwareConfigurationManagement;
 
 namespace AvansDevops.ProjectManagementSystem
@@ -10,6 +11,7 @@ namespace AvansDevops.ProjectManagementSystem
         public Backlog projectBacklog { get; set; } = new Backlog();  
         public List<User> testers { get; set; } = new List<User>();
         public User leadDeveloper { get; set; }
+        public Forum forum { get; set; } = new Forum();
         public Sprint currentSprint { get; private set; }
 
         public Project(IGitVersionControl versionControl, User leadDeveloper) {

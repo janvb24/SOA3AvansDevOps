@@ -13,7 +13,12 @@ using AvansDevops.DevOps.PackageActions;
 using AvansDevops.DevOps.SourceActions;
 using AvansDevops.DevOps.TestActions;
 using AvansDevops.DevOps.UtilityActions;
+using AvansDevops.ProjectManagementSystem.forum;
+using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem.sprint;
+
+//Notification service
+INotificationService notificationService = new NotificationService();
 
 //Users
 User developer = new User("dev", "dev@email.nl", "0638475686");
@@ -30,12 +35,20 @@ IGitVersionControl versionControl = new GitVersionControl(
 
 //Project with backlog
 Project project = new(versionControl, developer);
-project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1, developer, tester, scrumMaster));
+project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1, null, tester, scrumMaster));
 var backlogItem = new EditableBacklogItem("Add domain model", 8, developer, tester, scrumMaster);
 backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developer, tester, scrumMaster, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developer, tester, scrumMaster, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developer, tester, scrumMaster, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
+
+//Forum
+ForumTread tread = new ForumTread(notificationService, developer);
+tread.items.Add(new ForumTreadItem("Item 1", developer));
+tread.items[0].nextTreadItem = new ForumTreadItem("new item after item 1", developer);
+tread.items[0].nextTreadItem = new ForumTreadItem("extra new content", developer);
+project.forum.newTread(tread);
+Console.WriteLine(tread.items[0]);
 
 //Backlog state
 backlogItem.currentState.Start(); //TODO --> DOINT
