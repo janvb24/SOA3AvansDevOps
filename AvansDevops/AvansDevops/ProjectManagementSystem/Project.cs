@@ -9,6 +9,7 @@ namespace AvansDevops.ProjectManagementSystem
         public Backlog projectBacklog { get; set; } = new Backlog();  
         public List<User> testers { get; set; } = new List<User>();
         public User leadDeveloper { get; set; }
+        public Forum forum { get; set; } = new Forum();
 
         public Project(IGitVersionControl versionControl, User leadDeveloper) {
             _versionControl = versionControl;
