@@ -30,5 +30,29 @@ namespace AvansDevops.ProjectManagementSystem
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
         }
+
+        /// <summary>
+        /// Move an existing backlog item from the project backlog to the current sprint backlog.
+        /// </summary>
+        /// <param name="backlogItem">The backlog item to be moved</param>
+        public void MoveBacklogItemToSprint(BacklogItem backlogItem)
+        {
+            bool removed = projectBacklog.RemoveBacklogItem(backlogItem);
+
+            if (removed) currentSprint.AddToBacklog(backlogItem);
+            else throw new ArgumentException("The backlog item does not exist in the project backlog");
+        }
+
+        /// <summary>
+        /// Add a new backlog item to the current sprint.
+        /// </summary>
+        /// <param name="backlogItem">The backlog item to be added</param>
+        public void AddNewBacklogItemToSprint(BacklogItem backlogItem)
+        {
+            bool inProjectBacklog = projectBacklog.GetBacklogItems().Contains(backlogItem);
+            
+            if (!inProjectBacklog) currentSprint.AddToBacklog(backlogItem);
+            else throw new ArgumentException("The backlog item may not exist in the project backlog");
+        }
     }
 }
