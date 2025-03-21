@@ -52,7 +52,7 @@ namespace AvansDevops.ProjectManagementSystem
             bool inProjectBacklog = projectBacklog.GetBacklogItems().Contains(backlogItem);
             
             if (!inProjectBacklog) currentSprint.AddToBacklog(backlogItem);
-            else throw new ArgumentException("The backlog item may not exist in the project backlog");
+            else throw new ArgumentException("The backlog item can not be in the project backlog");
         }
     }
 }
