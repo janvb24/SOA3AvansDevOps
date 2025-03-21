@@ -11,12 +11,14 @@ namespace AvansDevops.ProjectManagementSystem
         public Backlog projectBacklog { get; set; } = new Backlog();  
         public List<User> testers { get; set; } = new List<User>();
         public User leadDeveloper { get; set; }
+        public List<User> developers { get; set; }
         public Forum forum { get; set; } = new Forum();
         public Sprint currentSprint { get; private set; }
 
-        public Project(IGitVersionControl versionControl, User leadDeveloper) {
+        public Project(IGitVersionControl versionControl, User leadDeveloper, List<User>? developers = null) {
             _versionControl = versionControl;
             this.leadDeveloper = leadDeveloper;
+            this.developers = developers ?? [];
         }
         
         public void NewSprint(User scrumMaster, IPipeline pipeline, string name, SprintType type)
