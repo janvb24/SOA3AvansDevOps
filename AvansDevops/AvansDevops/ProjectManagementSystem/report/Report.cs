@@ -14,7 +14,7 @@ namespace AvansDevops.ProjectManagementSystem.report {
         /// <summary>
         /// Generates report based on the sprint
         /// </summary>
-        public void GenerateReport() {
+        public string GenerateReport() {
             StringBuilder report = new StringBuilder();
 
             report.AppendLine(template.header);
@@ -32,7 +32,7 @@ namespace AvansDevops.ProjectManagementSystem.report {
             string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
             File.WriteAllText(filePath, report.ToString());
             Console.WriteLine($"Report saved to {filePath}");
-            Console.WriteLine(report.ToString());
+            return report.ToString();
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace AvansDevops.ProjectManagementSystem.report {
             
             //Developers with their storypoints
             foreach (User developer in sprintForReport.project.developers) {
-                teamLayout.AppendLine($"Developer: {developer.name}. ");
-                teamLayout.Append($"Amount of Storypoints: {this.CalcStoryPointsPerDeveloper(developer)}");
+                teamLayout.Append($"Developer: {developer.name}. ");
+                teamLayout.AppendLine($"Amount of Storypoints: {this.CalcStoryPointsPerDeveloper(developer)}");
             }
 
             //Other team members
@@ -94,7 +94,7 @@ namespace AvansDevops.ProjectManagementSystem.report {
         /// </summary>
         /// <param name="user">The developer</param>
         /// <returns>Amount of storypoints of the developer in the sprint</returns>
-        public int CalcStoryPointsPerDeveloper(User user) {
+        private int CalcStoryPointsPerDeveloper(User user) {
             int amount = 0;
             foreach (var backlogItem in sprintForReport.backlog.GetBacklogItems()) {
                 if (backlogItem.developer == user) {

@@ -1,5 +1,6 @@
 ﻿using AvansDevops.DevOps;
 using AvansDevops.ProjectManagementSystem.backlog;
+using AvansDevops.ProjectManagementSystem.report;
 using AvansDevops.ProjectManagementSystem.sprint.SprintStates;
 
 namespace AvansDevops.ProjectManagementSystem.sprint;
@@ -15,6 +16,7 @@ public abstract class Sprint
     private User _scrumMaster;
     private IPipeline _pipeline;
     public Backlog backlog;
+    public Report report;
 
     public string name
     {
@@ -55,7 +57,7 @@ public abstract class Sprint
     public ISprintState sprintState { get; set; }
     public bool editable { get; set; }
 
-    protected Sprint(Project project, User scrumMaster, IPipeline pipeline, string name)
+    protected Sprint(Project project, User scrumMaster, IPipeline pipeline, string name, ReportTemplate? reportTemplate = null)
     {
         _project = project;
         _scrumMaster = scrumMaster;
@@ -67,6 +69,10 @@ public abstract class Sprint
         backlog = new Backlog();
         sprintState = new CreatedSprintState(this);
         editable = true;
+        reportTemplate = reportTemplate ?? new ReportTemplate(
+            ".............\nSprint header\n.............\n", 
+            ".............\nSprint footer\n.............");
+        report = new Report(this, reportTemplate);
     }
 
     /// <summary>

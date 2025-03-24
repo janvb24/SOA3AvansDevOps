@@ -81,12 +81,9 @@ IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);
 
 // Sprint
+
 project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
 project.currentSprint.AddToBacklog(backlogItem);
 
 // Generate report
-string reportHeader = ".............\nSprint header\n.............";
-string reportFooter = ".............\nSprint footer\n.............";
-ReportTemplate template = new(reportHeader, reportFooter);
-Report report = new(project.currentSprint, template);
-report.GenerateReport();
+project.currentSprint.report.GenerateReport();
