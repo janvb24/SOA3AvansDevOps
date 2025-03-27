@@ -14,7 +14,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("Lead", "", "");
             var developer = new User("Dev", "", "");
-            var project = new Project(git, leadDev, [developer]);
+            var project = new Project(git, [developer], developer, leadDev, developer);
             User scrumMaster = new User("scrum", "", "");
             IPipeline pipeline = Substitute.For<IPipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
@@ -47,7 +47,8 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             // Arrange
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("", "", "");
-            var project = new Project(git, leadDev);
+            var developer = new User("Dev", "", "");
+            var project = new Project(git, [developer], developer, leadDev, developer);
             User scrumMaster = new User("", "", "");
             IPipeline pipeline = Substitute.For<IPipeline>();
             Sprint sprint = new ReviewSprint(project, scrumMaster, pipeline, "name");
@@ -66,7 +67,8 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             // Arrange
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("", "", "");
-            var project = new Project(git, leadDev);
+            var developer = new User("Dev", "", "");
+            var project = new Project(git, [developer], developer, leadDev, developer);
             User scrumMaster = new User("", "", "");
             IPipeline pipeline = Substitute.For<IPipeline>();
             pipeline.GetActions().Returns([new AzureDeployAction("test")]);
@@ -85,8 +87,8 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
         public void TestGenerateTitleForOtherTypeOfSprint() {
             // Arrange
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
-            var leadDev = new User("", "", "");
-            var project = new Project(git, leadDev);
+            var developer = new User("Dev", "", "");
+            var project = new Project(git, [developer], developer, developer, developer);
             User scrumMaster = new User("", "", "");
             IPipeline pipeline = Substitute.For<IPipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
@@ -105,7 +107,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("Lead", "", "");
             var developer = new User("Dev", "", "");
-            var project = new Project(git, leadDev, [developer]);
+            var project = new Project(git, [developer], developer, leadDev, developer);
             User scrumMaster = new User("scrum", "", "");
             IPipeline pipeline = Substitute.For<IPipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
@@ -123,9 +125,8 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
         [Fact]
         public void TestGenerateBurndownChart() {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
-            var leadDev = new User("Lead", "", "");
             var developer = new User("Dev", "", "");
-            var project = new Project(git, leadDev, [developer]);
+            var project = new Project(git, [developer], developer, developer, developer);
             User scrumMaster = new User("scrum", "", "");
             IPipeline pipeline = Substitute.For<IPipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
