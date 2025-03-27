@@ -9,20 +9,95 @@ namespace AvansDevopsTests.ProjectManagementSystem;
 public class ProjectTests
 {
     [Fact]
+    public void AddDeveloperShouldAddANewDeveloper()
+    {
+        // Arrange
+        var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var newDeveloper = new User("", "", "");
+        List<User> expected = [developers[0], newDeveloper];
+
+        // Act
+        project.AddDeveloper(newDeveloper);
+        
+        // Assert
+        Assert.Equivalent(project.developers, expected, true);
+    }
+
+    [Fact]
+    public void RemoveDeveloperShouldRemoveAnExistingDeveloper()
+    {
+        // Arrange
+        var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var newDeveloper = new User("", "", "");
+        project.AddDeveloper(newDeveloper);
+        List<User> expected = [developers[0]];
+        
+        // Act
+        project.RemoveDeveloper(newDeveloper);
+        
+        // Assert
+        Assert.Equivalent(project.developers, expected, true);
+    }
+    
+    [Fact]
+    public void RemoveDeveloperShouldNotRemoveLastDeveloper()
+    {
+        // Arrange
+        var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        
+        // Assert
+        Assert.Throws<ArgumentException>(() => project.RemoveDeveloper(developers[0]));
+    }
+    
+    [Fact]
+    public void RemoveDeveloperShouldNotRemoveNotExistingDeveloper()
+    {
+        // Arrange
+        var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var notExistingDeveloper = new User("", "", "");
+        
+        // Assert
+        Assert.Throws<ArgumentException>(() => project.RemoveDeveloper(notExistingDeveloper));
+    }
+    
+    [Fact]
     public void NewSprintShouldCreateReleaseSprint()
     {
         // Arrange
         var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(gitVersionControl, leadDev);
-        var user = new User("name", "email@server.com", "0612345678");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("name", "email@server.com", "0612345678");
         var pipeline = Substitute.For<IPipeline>();
         var deployAction = Substitute.For<DeployAction>("deploy.server.com");
         pipeline.GetActions().Returns([deployAction]);
-        var expected = new ReleaseSprint(project, user, pipeline, "New sprint");
+        var expected = new ReleaseSprint(project, scrumMaster, pipeline, "New sprint");
 
         // Act
-        project.NewSprint(user, pipeline, "New sprint", SprintType.RELEASE_SPRINT);
+        project.NewSprint(scrumMaster, pipeline, "New sprint", SprintType.RELEASE_SPRINT);
         var result = project.currentSprint;
 
         // Assert
@@ -34,14 +109,17 @@ public class ProjectTests
     {
         // Arrange
         var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(gitVersionControl, leadDev);
-        var user = new User("name", "email@server.com", "0612345678");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("name", "email@server.com", "0612345678");
         var pipeline = Substitute.For<IPipeline>();
-        var expected = new ReviewSprint(project, user, pipeline, "New sprint");
+        var expected = new ReviewSprint(project, scrumMaster, pipeline, "New sprint");
 
         // Act
-        project.NewSprint(user, pipeline, "New sprint", SprintType.REVIEW_SPRINT);
+        project.NewSprint(scrumMaster, pipeline, "New sprint", SprintType.REVIEW_SPRINT);
         var result = project.currentSprint;
 
         // Assert
