@@ -14,15 +14,18 @@ public class ReleaseSprintTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var user = new User("name", "email", "phoneNumber");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
         var deployAction = Substitute.For<DeployAction>("url");
         pipeline.GetActions().Returns([deployAction]);
 
         // Act
-        var result = new ReleaseSprint(project, user, pipeline, "name");
+        var result = new ReleaseSprint(project, scrumMaster, pipeline, "name");
 
         // Assert
         Assert.NotNull(result);
@@ -33,14 +36,17 @@ public class ReleaseSprintTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var user = new User("name", "email", "phoneNumber");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
         var testAction = Substitute.For<TestAction>();
         pipeline.GetActions().Returns([testAction]);
 
         // Assert
-        Assert.Throws<ArgumentException>(() => new ReleaseSprint(project, user, pipeline, "name"));
+        Assert.Throws<ArgumentException>(() => new ReleaseSprint(project, scrumMaster, pipeline, "name"));
     }
 }

@@ -13,11 +13,14 @@ public class DoingSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var user = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
-        var sprint = new SprintMock(project, user, pipeline, "");
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.sprintState = new DoingSprintState(sprint);
 
         // Act
@@ -32,11 +35,14 @@ public class DoingSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var user = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
-        var sprint = new SprintMock(project, user, pipeline, "");
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.sprintState = new DoingSprintState(sprint);
 
         // Act
