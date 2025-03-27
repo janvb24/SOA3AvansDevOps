@@ -6,6 +6,15 @@ namespace AvansDevops.ProjectManagementSystem.sprint.SprintStates {
             if (sprint is ReleaseSprint) {
                 IPipelineVisitor visitor = new RunPipelineVisitor();
                 bool success = sprint.pipeline.Accept(visitor);
+
+                if (success) {
+                    sprint.approved = true;
+                    sprint.sprintState = new ClosedSprintState();
+                } else {
+                    // TODO: next user story implementations
+                }
+
+                return;
             }
 
             // update sprint state
