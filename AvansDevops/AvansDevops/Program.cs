@@ -16,6 +16,7 @@ using AvansDevops.DevOps.UtilityActions;
 using AvansDevops.ProjectManagementSystem.forum;
 using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem.sprint;
+using AvansDevops.ProjectManagementSystem.report;
 
 //Notification service
 INotificationService notificationService = new NotificationService();
@@ -82,5 +83,9 @@ IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);
 
 // Sprint
+
 project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
 project.currentSprint.AddToBacklog(backlogItem);
+
+// Generate report
+project.currentSprint.report.GenerateReport();
