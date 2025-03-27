@@ -17,7 +17,7 @@ public class CreatedSprintState(Sprint sprint) : ISprintState
         Console.WriteLine("Sprint can not be finished while in created state");
     }
 
-    public void CloseSprint()
+    public void CloseSprint(bool approve)
     {
         Console.WriteLine("Sprint can not be closed while in created state");
     }

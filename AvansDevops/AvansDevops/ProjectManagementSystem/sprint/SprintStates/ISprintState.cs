@@ -15,5 +15,5 @@ public interface ISprintState
     /// <summary>
     /// Close the sprint
     /// </summary>
-    public void CloseSprint();
+    public void CloseSprint(bool approve);
 }

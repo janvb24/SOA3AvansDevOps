@@ -1,5 +1,6 @@
 ﻿using AvansDevops.DevOps;
 using AvansDevops.DevOps.DeployActions;
+using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem;
 using AvansDevops.ProjectManagementSystem.backlog;
 using AvansDevops.ProjectManagementSystem.sprint;
@@ -8,6 +9,7 @@ using AvansDevops.SoftwareConfigurationManagement;
 namespace AvansDevopsTests.ProjectManagementSystem;
 
 public class ProjectTests {
+
     [Fact]
     public void AddDeveloperShouldAddANewDeveloper() {
         // Arrange
@@ -16,7 +18,7 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var newDeveloper = new User("", "", "");
         List<User> expected = [developers[0], newDeveloper];
 
@@ -34,8 +36,8 @@ public class ProjectTests {
         List<User> developers = [new User("", "", "")];
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var productOwner = new User("", "", ""); 
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var newDeveloper = new User("", "", "");
         project.AddDeveloper(newDeveloper);
         List<User> expected = [developers[0]];
@@ -55,7 +57,7 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
 
         // Assert
         Assert.Throws<ArgumentException>(() => project.RemoveDeveloper(developers[0]));
@@ -69,7 +71,7 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var notExistingDeveloper = new User("", "", "");
 
         // Assert
@@ -84,9 +86,9 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("name", "email@server.com", "0612345678");
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
         var deployAction = Substitute.For<DeployAction>("deploy.server.com");
         pipeline.GetActions().Returns([deployAction]);
         var expected = new ReleaseSprint(project, scrumMaster, pipeline, "New sprint");
@@ -107,9 +109,9 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("name", "email@server.com", "0612345678");
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
         var expected = new ReviewSprint(project, scrumMaster, pipeline, "New sprint");
 
         // Act
@@ -129,10 +131,10 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("name", "email@server.com", "0612345678");
         var backlogItem = new BacklogItemMock("backlog item", 0, tester, scrumMaster);
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
 
         // Act
         project.NewSprint(scrumMaster, pipeline, "new sprint", SprintType.REVIEW_SPRINT);
@@ -153,10 +155,10 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("name", "email@server.com", "0612345678");
         var backlogItem = new BacklogItemMock("backlog item", 0, tester, scrumMaster);
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
         
         // Act
         project.NewSprint(scrumMaster, pipeline, "new sprint", SprintType.REVIEW_SPRINT);
@@ -174,10 +176,10 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("name", "email@server.com", "0612345678");
         var backlogItem = new BacklogItemMock("backlog item", 0, tester, scrumMaster);
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
         
         // Act
         project.NewSprint(scrumMaster, pipeline, "new sprint", SprintType.REVIEW_SPRINT);
@@ -196,10 +198,10 @@ public class ProjectTests {
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner);
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("name", "email@server.com", "0612345678");
         var backlogItem = new BacklogItemMock("backlog item", 0, tester, scrumMaster);
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
         
         // Act
         project.projectBacklog.AddBacklogItem(backlogItem);

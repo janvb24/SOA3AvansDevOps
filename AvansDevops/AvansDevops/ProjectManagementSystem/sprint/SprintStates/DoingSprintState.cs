@@ -13,7 +13,7 @@ public class DoingSprintState(Sprint sprint) : ISprintState
         Console.WriteLine("Sprint has been finished");
     }
 
-    public void CloseSprint()
+    public void CloseSprint(bool approve)
     {
         Console.WriteLine("Sprint can not be closed during the doing state");
     }

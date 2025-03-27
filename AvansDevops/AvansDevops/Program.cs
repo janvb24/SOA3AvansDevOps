@@ -37,7 +37,7 @@ IGitVersionControl versionControl = new GitVersionControl(
 );
 
 //Project with backlog
-Project project = new(versionControl, developers, tester, leadDev, productOwner);
+Project project = new(versionControl, developers, tester, leadDev, productOwner, notificationService);
 project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1, null, tester, scrumMaster));
 var backlogItem = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
 backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developers[0], tester, scrumMaster, null, backlogItem));
@@ -69,7 +69,7 @@ backlogItem.currentState.Approve(); //TESTED --> DONE
 
 // Build and run a CICD pipeline
 IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
-Pipeline pipeline = pipelineBuilder
+ConcretePipeline pipeline = pipelineBuilder
     .AddUtilityAction(new CmdUtilityAction("Echo Hello world!"))
     .AddSourceAction(new GitSourceAction("https://github.com/janvb24/SOA3AvansDevOps.git"))
     .AddPackageAction(new NugetPackageAction("https://www.nuget.org/packages/xunit"))
