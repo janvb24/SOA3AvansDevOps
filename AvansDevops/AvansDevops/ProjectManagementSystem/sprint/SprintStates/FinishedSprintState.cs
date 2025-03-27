@@ -2,29 +2,22 @@
 
 namespace AvansDevops.ProjectManagementSystem.sprint.SprintStates {
     public class FinishedSprintState(Sprint sprint) : ISprintState {
-        public void CloseSprint(bool approve) {
-            if (approve) {
-                // Run Pipeline
-                StartPipeline();
-            } else {
-                // send message to PO annd SCRUM master and update state
-                sprint.project.notificationService.Send([sprint.project.productOwner, sprint.scrumMaster], "Sprint has not been approved");
+        public void ApproveSprint() {
+            if (sprint is ReleaseSprint) {
+                IPipelineVisitor visitor = new RunPipelineVisitor();
+                bool success = sprint.pipeline.Accept(visitor);
             }
 
             // update sprint state
-            sprint.approved = approve;
+            sprint.approved = true;
             sprint.sprintState = new ClosedSprintState();
         }
 
-        public void StartPipeline() {
-            if (sprint is not ReleaseSprint) {
-                return;
-            }
-
-            IPipelineVisitor visitor = new RunPipelineVisitor();
-            bool success = sprint.pipeline.Accept(visitor);
-
-            //TODO: use success for other user story
+        public void DenySprint() {
+            // send message to PO annd SCRUM master and update state
+            sprint.project.notificationService.Send([sprint.project.productOwner, sprint.scrumMaster], "Sprint has not been approved");
+            sprint.approved = false;
+            sprint.sprintState = new ClosedSprintState();
         }
 
         public void FinishSprint() {

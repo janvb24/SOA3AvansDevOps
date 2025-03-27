@@ -13,7 +13,13 @@ public interface ISprintState
     public void FinishSprint();
     
     /// <summary>
-    /// Close the sprint
+    /// Approves the sprint
     /// </summary>
-    public void CloseSprint(bool approve);
+    public void ApproveSprint();
+
+
+    /// <summary>
+    /// Denies the sprint
+    /// </summary>
+    public void DenySprint();
 }

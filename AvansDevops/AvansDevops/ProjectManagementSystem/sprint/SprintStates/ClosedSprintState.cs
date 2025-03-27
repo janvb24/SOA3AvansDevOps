@@ -1,7 +1,12 @@
 ﻿namespace AvansDevops.ProjectManagementSystem.sprint.SprintStates {
     public class ClosedSprintState : ISprintState {
-        public void CloseSprint(bool approve) {
+        public void ApproveSprint() {
             Console.WriteLine("Sprint has already been finished");
+        }
+
+        public void DenySprint() {
+            Console.WriteLine("Sprint has already been finished");
+
         }
 
         public void FinishSprint() {

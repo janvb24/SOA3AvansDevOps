@@ -110,5 +110,9 @@ public abstract class Sprint
     /// <summary>
     /// Close the sprint
     /// </summary>
-    public void CloseSprint(bool approve) => sprintState.CloseSprint(approve);
+    public void CloseSprint(bool approve) { 
+        if (approve) sprintState.ApproveSprint();
+        else sprintState.DenySprint();
+        
+    }
 }

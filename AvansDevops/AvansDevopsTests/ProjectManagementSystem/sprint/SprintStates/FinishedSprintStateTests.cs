@@ -28,7 +28,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.sprint.SprintStates {
 
             // Assert
             Assert.Equivalent(sprint.sprintState, new FinishedSprintState(sprint));
-            Assert.True(sprint.approved);
+            Assert.False(sprint.approved);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.sprint.SprintStates {
 
             // Assert
             Assert.Equivalent(sprint.sprintState, new FinishedSprintState(sprint));
-            Assert.True(sprint.approved);
+            Assert.False(sprint.approved);
         }
 
         [Fact]
