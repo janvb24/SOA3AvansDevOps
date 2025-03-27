@@ -26,10 +26,11 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
             backlog.AddBacklogItem(backlogItem);
             
             // Act
-            backlog.RemoveBacklogItem(backlogItem);
+            var result = backlog.RemoveBacklogItem(backlogItem);
             
             // Assert
             Assert.DoesNotContain(backlogItem, backlog.GetBacklogItems());
+            Assert.True(result);
         }
 
         [Fact]

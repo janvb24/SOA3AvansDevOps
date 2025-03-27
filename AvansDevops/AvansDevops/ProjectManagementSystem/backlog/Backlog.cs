@@ -16,8 +16,9 @@
         /// Removed backlogItem from the backlog
         /// </summary>
         /// <param name="backlogItem">Backlog item to remove</param>
-        public void RemoveBacklogItem(BacklogItem backlogItem) {
-            _backlogItems.Remove(backlogItem);
+        /// <returns>True if removed successfully, False if not</returns>
+        public bool RemoveBacklogItem(BacklogItem backlogItem) {
+            return _backlogItems.Remove(backlogItem);
         }
 
         /// <summary>

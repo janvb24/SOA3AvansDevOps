@@ -13,9 +13,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = true;
@@ -32,9 +35,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = false;
@@ -48,9 +54,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = true;
@@ -67,9 +76,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = false;
@@ -83,18 +95,21 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = true;
         
         // Act
-        sprint.project = new Project(git, leadDev);
+        sprint.project = new Project(git, developers, tester, leadDev, productOwner);
         
         // Assert
-        Assert.Equivalent(new Project(git, leadDev), sprint.project, true);
+        Assert.Equivalent(new Project(git, developers, tester, leadDev, productOwner), sprint.project, true);
     }
     
     [Fact]
@@ -102,15 +117,18 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = false;
 
         // Assert
-        Assert.Throws<ArgumentException>(() => sprint.project = new Project(git, leadDev));
+        Assert.Throws<ArgumentException>(() => sprint.project = new Project(git, developers, tester, leadDev, productOwner));
     }
     
     [Fact]
@@ -118,10 +136,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var scrumMaster = new User("", "", "");
+        List<User> developers = [new User("", "", "")];
         var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         BacklogItem backlogItem = new BacklogItemMock("", 0, tester, scrumMaster);
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -140,10 +160,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var scrumMaster = new User("", "", "");
+        List<User> developers = [new User("", "", "")];
         var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         BacklogItem backlogItem = new BacklogItemMock("", 0, tester, scrumMaster);
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
@@ -158,9 +180,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = true;
@@ -177,9 +202,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = false;
@@ -193,9 +221,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = true;
@@ -212,9 +243,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
         var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        User scrumMaster = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         sprint.editable = false;
@@ -228,10 +262,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var scrumMaster = new User("", "", "");
+        List<User> developers = [new User("", "", "")];
         var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         BacklogItem parentBacklogItem = new BacklogItemMock("", 0, tester, scrumMaster);
@@ -246,10 +282,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var scrumMaster = new User("", "", "");
+        List<User> developers = [new User("", "", "")];
         var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         BacklogItem backlogItem = new BacklogItemMock("", 0, tester, scrumMaster);
@@ -267,10 +305,12 @@ public class SprintTests
     {
         // Arrange
         IGitVersionControl git = Substitute.For<IGitVersionControl>();
-        var leadDev = new User("", "", "");
-        var project = new Project(git, leadDev);
-        var scrumMaster = new User("", "", "");
+        List<User> developers = [new User("", "", "")];
         var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
         IPipeline pipeline = Substitute.For<IPipeline>();
         Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "");
         BacklogItem backlogItem1 = new BacklogItemMock("", 0, tester, scrumMaster);
