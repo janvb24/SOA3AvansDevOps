@@ -11,7 +11,7 @@ namespace AvansDevops.ProjectManagementSystem.sprint.SprintStates {
                     sprint.approved = true;
                     sprint.sprintState = new ClosedSprintState();
                 } else {
-                    // TODO: next user story implementations
+                    Console.WriteLine("Pipeline failed, sprint not approved");
                 }
 
                 return;

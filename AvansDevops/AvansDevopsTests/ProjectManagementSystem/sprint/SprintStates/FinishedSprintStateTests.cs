@@ -79,6 +79,31 @@ namespace AvansDevopsTests.ProjectManagementSystem.sprint.SprintStates {
         }
 
         [Fact]
+        public void CloseSprintShouldRunPipelineIfApproveAndIfReleaseSprintWithPipelineFaile() {
+            // Arrange
+            var git = Substitute.For<IGitVersionControl>();
+            List<User> developers = [new User("", "", "")];
+            var tester = new User("", "", "");
+            var leadDev = new User("", "", "");
+            var productOwner = new User("", "", "");
+            var project = new Project(git, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
+            var scrumMaster = new User("", "", "");
+            var pipeline = Substitute.For<Pipeline>();
+            pipeline.GetActions().Returns([new AzureDeployAction("test")]);
+            pipeline.Accept(Arg.Any<RunPipelineVisitor>()).Returns(false);
+            var sprint = new ReleaseSprint(project, scrumMaster, pipeline, "");
+            sprint.sprintState = new FinishedSprintState(sprint);
+
+            // Act
+            sprint.CloseSprint(true);
+
+            // Assert
+            pipeline.Received().Accept(Arg.Any<RunPipelineVisitor>());
+            Assert.Equivalent(sprint.sprintState, new FinishedSprintState(sprint));
+            Assert.False(sprint.approved);
+        }
+
+        [Fact]
         public void CloseSprintShouldCloseIfApproveAndReviewSprint() {
             // Arrange
             var git = Substitute.For<IGitVersionControl>();
