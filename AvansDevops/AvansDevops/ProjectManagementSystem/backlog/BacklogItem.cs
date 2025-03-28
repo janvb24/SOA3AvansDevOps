@@ -10,7 +10,7 @@ namespace AvansDevops.ProjectManagementSystem.backlog
         private BacklogItem? _parent;
         private List<BacklogItem>? _subTasks = null;
         private User? _developer;
-        public User tester { get; init; }
+        public User? tester { get; init; }
         public User? scrumMaster { get; init; }
         public TodoBacklogItemState todoState;
         public DoingBacklogItemState doingState;
