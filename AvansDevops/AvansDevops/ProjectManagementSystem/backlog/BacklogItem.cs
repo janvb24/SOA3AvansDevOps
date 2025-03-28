@@ -10,8 +10,8 @@ namespace AvansDevops.ProjectManagementSystem.backlog
         private BacklogItem? _parent;
         private List<BacklogItem>? _subTasks = null;
         private User? _developer;
-        public User? tester { get; init; }
-        public User? scrumMaster { get; init; }
+        private User? _tester;
+        private User? _scrumMaster;
         public TodoBacklogItemState todoState;
         public DoingBacklogItemState doingState;
         public ReadyForTestingBacklogItemState readyForTestingState;
@@ -54,8 +54,25 @@ namespace AvansDevops.ProjectManagementSystem.backlog
         public virtual User? developer {
             get => _developer;
             set {
-                this.testingState?.UpdateDeveloper(value);
+                this.testingState?.UpdateUsers(value, null);
                 _developer = value;
+            }
+        }
+
+        public virtual User? tester {
+            get => _tester;
+            set {
+                this.doingState?.UpdateTester(value);
+                this.testedState?.UpdateTester(value);
+                _tester = value;
+            }
+        }
+
+        public virtual User? scrumMaster {
+            get => _scrumMaster;
+            set {
+                this.testingState?.UpdateUsers(null, value);
+                _scrumMaster = value;
             }
         }
 

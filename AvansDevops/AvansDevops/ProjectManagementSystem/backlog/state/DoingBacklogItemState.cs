@@ -7,12 +7,16 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
     {
         private readonly INotificationService _notificationService;
         private BacklogItem _backlogItem;
-        private User _tester;
+        private User? _tester;
 
-        public DoingBacklogItemState(BacklogItem backlogItem, INotificationService notificationService, User tester)
+        public DoingBacklogItemState(BacklogItem backlogItem, INotificationService notificationService, User? tester)
         {
             _backlogItem = backlogItem;
             _notificationService = notificationService;
+            _tester = tester;
+        }
+
+        public void UpdateTester(User? tester) {
             _tester = tester;
         }
 
@@ -26,7 +30,7 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
         {
             Console.WriteLine("Backlog item switched to ready for testing");
             _backlogItem.currentState = _backlogItem.readyForTestingState;
-            _notificationService.Send([_tester], "Backlog item is ready for testing");
+            _notificationService.Send(_tester != null ? [_tester] : [], "Backlog item is ready for testing");
         }
 
         public void Deny()
