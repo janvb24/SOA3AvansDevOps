@@ -8,9 +8,9 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
         private readonly INotificationService _notificationService;
         private BacklogItem _backlogItem;
         private User? _leadDeveloper;
-        private User _scrumMaster;
+        private User? _scrumMaster;
 
-        public TestingBacklogItemState(BacklogItem backlogItem, INotificationService notificationService, User? leadDeveloper, User scrumMaster)
+        public TestingBacklogItemState(BacklogItem backlogItem, INotificationService notificationService, User? leadDeveloper, User? scrumMaster)
         {
             _notificationService = notificationService;
             _backlogItem = backlogItem;
@@ -18,8 +18,9 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
             _scrumMaster = scrumMaster;
         }
 
-        public void UpdateDeveloper(User? newDeveloper) {
-            _leadDeveloper = newDeveloper;
+        public void UpdateUsers(User? newDeveloper, User? newScrumMaster) {
+            _leadDeveloper = newDeveloper ?? _leadDeveloper;
+            _scrumMaster = newScrumMaster ?? _scrumMaster; ;
         }
 
         public void Approve()
@@ -38,7 +39,7 @@ namespace AvansDevops.ProjectManagementSystem.backlog.state
         {
             Console.WriteLine("Backlog item denied, switching to do");
             _backlogItem.currentState = _backlogItem.todoState;
-            _notificationService.Send([_scrumMaster], "Backlog item is denied, switch to to do");
+            _notificationService.Send(_scrumMaster != null ? [_scrumMaster] : [], "Backlog item is denied, switch to to do");
         }
 
         public void Start()

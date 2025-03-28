@@ -5,6 +5,7 @@ public class CreatedSprintState(Sprint sprint) : ISprintState
     public void StartSprint()
     {
         if (sprint.GetBacklogItems().Count == 0) throw new ArgumentException("Sprint backlog must not be empty");
+        if (sprint.endDateTime <= DateTime.Now) throw new ArgumentException("Sprint end time must be in the future");
         
         sprint.beginDateTime = DateTime.Now;
         sprint.sprintState = new DoingSprintState(sprint);
@@ -17,9 +18,13 @@ public class CreatedSprintState(Sprint sprint) : ISprintState
         Console.WriteLine("Sprint can not be finished while in created state");
     }
 
-    public void CloseSprint()
-    {
-        Console.WriteLine("Sprint can not be closed while in created state");
+    public void ApproveSprint() {
+        Console.WriteLine("Sprint has not been finished yet");
     }
-    
+
+    public void DenySprint() {
+        Console.WriteLine("Sprint has not been finished yet");
+
+    }
+
 }

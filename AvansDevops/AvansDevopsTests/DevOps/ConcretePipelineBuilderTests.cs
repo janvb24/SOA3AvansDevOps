@@ -17,7 +17,7 @@ public class ConcretePipelineBuilderTests
     {
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         
         // Act
         var result = pipelineBuilder.Build();
@@ -32,7 +32,7 @@ public class ConcretePipelineBuilderTests
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
         var packageAction = Substitute.For<PackageAction>("https://www.google.com");
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         expected.Add(packageAction);
 
         // Act
@@ -48,7 +48,7 @@ public class ConcretePipelineBuilderTests
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
         var sourceAction = Substitute.For<SourceAction>("https://www.google.com");
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         expected.Add(sourceAction);
 
         // Act
@@ -64,7 +64,7 @@ public class ConcretePipelineBuilderTests
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
         var buildAction = Substitute.For<BuildAction>();
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         expected.Add(buildAction);
 
         // Act
@@ -80,7 +80,7 @@ public class ConcretePipelineBuilderTests
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
         var testAction = Substitute.For<TestAction>();
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         expected.Add(testAction);
 
         // Act
@@ -96,7 +96,7 @@ public class ConcretePipelineBuilderTests
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
         var analysisAction = Substitute.For<AnalysisAction>();
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         expected.Add(analysisAction);
 
         // Act
@@ -112,7 +112,7 @@ public class ConcretePipelineBuilderTests
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
         var utilityAction = Substitute.For<UtilityAction>("");
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         expected.Add(utilityAction);
 
         // Act
@@ -128,7 +128,7 @@ public class ConcretePipelineBuilderTests
         // Arrange
         IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
         var deployAction = Substitute.For<DeployAction>("https://www.google.com");
-        var expected = new Pipeline(new NotificationService());
+        var expected = new ConcretePipeline(new NotificationService());
         expected.Add(deployAction);
 
         // Act

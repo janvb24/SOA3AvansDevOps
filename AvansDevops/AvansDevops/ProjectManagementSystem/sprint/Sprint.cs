@@ -1,5 +1,6 @@
 ﻿using AvansDevops.DevOps;
 using AvansDevops.ProjectManagementSystem.backlog;
+using AvansDevops.ProjectManagementSystem.report;
 using AvansDevops.ProjectManagementSystem.sprint.SprintStates;
 
 namespace AvansDevops.ProjectManagementSystem.sprint;
@@ -13,8 +14,10 @@ public abstract class Sprint
     private DateTime _endDateTime;
     private Project _project;
     private User _scrumMaster;
-    private IPipeline _pipeline;
+    private Pipeline _pipeline;
     public Backlog backlog;
+    public Report report;
+    public bool approved { get; set; }
 
     public string name
     {
@@ -46,7 +49,7 @@ public abstract class Sprint
         set => _scrumMaster = editable ? value : throw new ArgumentException(UNEDITABLE_EXCEPTION);
     }
 
-    public IPipeline pipeline
+    public Pipeline pipeline
     {
         get => _pipeline;
         set => _pipeline = editable ? value : throw new ArgumentException(UNEDITABLE_EXCEPTION);
@@ -55,7 +58,7 @@ public abstract class Sprint
     public ISprintState sprintState { get; set; }
     public bool editable { get; set; }
 
-    protected Sprint(Project project, User scrumMaster, IPipeline pipeline, string name)
+    protected Sprint(Project project, User scrumMaster, Pipeline pipeline, string name, ReportTemplate? reportTemplate = null)
     {
         _project = project;
         _scrumMaster = scrumMaster;
@@ -67,6 +70,10 @@ public abstract class Sprint
         backlog = new Backlog();
         sprintState = new CreatedSprintState(this);
         editable = true;
+        reportTemplate = reportTemplate ?? new ReportTemplate(
+            ".............\nSprint header\n.............\n", 
+            ".............\nSprint footer\n.............");
+        report = new Report(this, reportTemplate);
     }
 
     /// <summary>
@@ -79,6 +86,22 @@ public abstract class Sprint
         if (!editable) throw new ArgumentException(UNEDITABLE_EXCEPTION);
         if (backlogItem.parent != null) throw new ArgumentException("Backlog item cannot be a subtask");
         backlog.AddBacklogItem(backlogItem);
+    }
+
+    /// <summary>
+    /// Makes the backlog persistent so the individual backlog items and subtasks can not be changed again.
+    /// This also disables the ability to change their state.
+    /// </summary>
+    public void PersistBacklog()
+    {
+        var backlogItems = backlog.GetBacklogItems();
+        var persistentBacklog = new Backlog();
+        backlogItems.ForEach(backlogItem =>
+        {
+            backlogItem.PersistSubtasks();
+            persistentBacklog.AddBacklogItem(new NonEditableBacklogItem(backlogItem as EditableBacklogItem));
+        });
+        backlog = persistentBacklog;
     }
 
     /// <summary>
@@ -103,5 +126,9 @@ public abstract class Sprint
     /// <summary>
     /// Close the sprint
     /// </summary>
-    public void CloseSprint() => sprintState.CloseSprint();
+    public void CloseSprint(bool approve) { 
+        if (approve) sprintState.ApproveSprint();
+        else sprintState.DenySprint();
+        
+    }
 }

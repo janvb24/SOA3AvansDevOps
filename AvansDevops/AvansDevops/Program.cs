@@ -16,13 +16,16 @@ using AvansDevops.DevOps.UtilityActions;
 using AvansDevops.ProjectManagementSystem.forum;
 using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem.sprint;
+using AvansDevops.ProjectManagementSystem.report;
 
 //Notification service
 INotificationService notificationService = new NotificationService();
 
 //Users
-User developer = new User("dev", "dev@email.nl", "0638475686");
+List<User> developers = [new User("dev", "dev@email.nl", "0638475686")];
 User tester = new User("test", "test@email.nl", "0638475686");
+User leadDev = new User("leadDev", "leadDev@email.nl", "0638475686");
+User productOwner = new User("productOwner", "productOwner@email.nl", "0638475686");
 User scrumMaster = new User("scrum", "scrum@email.nl", "0638475686");
 
 //Version Control
@@ -34,19 +37,23 @@ IGitVersionControl versionControl = new GitVersionControl(
 );
 
 //Project with backlog
-Project project = new(versionControl, developer);
+Project project = new(versionControl, developers, tester, leadDev, productOwner, notificationService);
 project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1, null, tester, scrumMaster));
-var backlogItem = new EditableBacklogItem("Add domain model", 8, developer, tester, scrumMaster);
-backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developer, tester, scrumMaster, null, backlogItem));
-backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developer, tester, scrumMaster, null, backlogItem));
-backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developer, tester, scrumMaster, null, backlogItem));
+var backlogItem = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
+var backlogItem2 = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
+var backlogItem3 = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
+backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developers[0], tester, scrumMaster, null, backlogItem));
+backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developers[0], tester, scrumMaster, null, backlogItem));
+backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developers[0], tester, scrumMaster, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
+project.projectBacklog.AddBacklogItem(backlogItem2);
+project.projectBacklog.AddBacklogItem(backlogItem3);
 
 //Forum
-ForumTread tread = new ForumTread(notificationService, developer);
-tread.items.Add(new ForumTreadItem("Item 1", developer));
-tread.items[0].nextTreadItem = new ForumTreadItem("new item after item 1", developer);
-tread.items[0].nextTreadItem = new ForumTreadItem("extra new content", developer);
+ForumTread tread = new ForumTread(notificationService, developers[0]);
+tread.items.Add(new ForumTreadItem("Item 1", developers[0]));
+tread.items[0].nextTreadItem = new ForumTreadItem("new item after item 1", developers[0]);
+tread.items[0].nextTreadItem = new ForumTreadItem("extra new content", developers[0]);
 project.forum.newTread(tread);
 Console.WriteLine(tread.items[0]);
 
@@ -66,7 +73,7 @@ backlogItem.currentState.Approve(); //TESTED --> DONE
 
 // Build and run a CICD pipeline
 IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
-Pipeline pipeline = pipelineBuilder
+ConcretePipeline pipeline = pipelineBuilder
     .AddUtilityAction(new CmdUtilityAction("Echo Hello world!"))
     .AddSourceAction(new GitSourceAction("https://github.com/janvb24/SOA3AvansDevOps.git"))
     .AddPackageAction(new NugetPackageAction("https://www.nuget.org/packages/xunit"))
@@ -81,4 +88,9 @@ pipeline.Accept(visitor);
 
 // Sprint
 project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
-project.currentSprint.AddToBacklog(backlogItem);
+project.currentSprint!.AddToBacklog(backlogItem);
+project.currentSprint!.AddToBacklog(backlogItem2);
+project.currentSprint!.AddToBacklog(backlogItem3);
+
+// Generate report
+project.currentSprint.report.GenerateReport();

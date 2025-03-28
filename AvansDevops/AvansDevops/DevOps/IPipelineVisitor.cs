@@ -15,7 +15,7 @@ public interface IPipelineVisitor
     /// Run's the pipeline that is being visited
     /// </summary>
     /// <param name="pipeline">The pipeline to be visited</param>
-    public void VisitPipeline(Pipeline pipeline);
+    public void VisitPipeline(ConcretePipeline pipeline);
 
     /// <summary>
     /// Run's the source action that is being visited

@@ -12,9 +12,9 @@ namespace AvansDevops.DevOps;
 public class ConcretePipelineBuilder : IPipelineBuilder
 {
     
-    private readonly Pipeline _pipeline = new(new NotificationService());
+    private readonly ConcretePipeline _pipeline = new(new NotificationService());
     
-    public Pipeline Build()
+    public ConcretePipeline Build()
     {
         return _pipeline;
     }
