@@ -88,6 +88,22 @@ public abstract class Sprint
     }
 
     /// <summary>
+    /// Makes the backlog persistent so the individual backlog items and subtasks can not be changed again.
+    /// This also disables the ability to change their state.
+    /// </summary>
+    public void PersistBacklog()
+    {
+        var backlogItems = backlog.GetBacklogItems();
+        var persistentBacklog = new Backlog();
+        backlogItems.ForEach(backlogItem =>
+        {
+            backlogItem.PersistSubtasks();
+            persistentBacklog.AddBacklogItem(new NonEditableBacklogItem(backlogItem as EditableBacklogItem));
+        });
+        backlog = persistentBacklog;
+    }
+
+    /// <summary>
     /// Get backlog items
     /// </summary>
     /// <returns>Backlog items</returns>

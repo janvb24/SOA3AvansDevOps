@@ -3,8 +3,16 @@
         public NonEditableBacklogItem(string title, int storyPoints, User? developer, User tester, User scrumMaster, List<BacklogItem>? subTasks = null, BacklogItem? parent = null)
             : base(title, storyPoints, developer, tester, scrumMaster, subTasks, parent) { }
 
-        public NonEditableBacklogItem(EditableBacklogItem editableBacklogItem, User tester, User scrumMaster)
-            : base(editableBacklogItem.title, editableBacklogItem.storyPoints, editableBacklogItem.developer, tester, scrumMaster, editableBacklogItem.subTasks, editableBacklogItem.parent) { }
+        public NonEditableBacklogItem(EditableBacklogItem backlogItem)
+            : base(backlogItem.title,
+                backlogItem.storyPoints,
+                backlogItem.developer,
+                backlogItem.tester,
+                backlogItem.scrumMaster,
+                backlogItem.subTasks,
+                backlogItem.parent)
+        {
+        }
 
         // Override setters to prevent modification
         public override string title {

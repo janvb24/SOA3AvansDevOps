@@ -13,14 +13,17 @@ public class DoingSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        List<User> developers = [new User("", "", "")];
+        List<User> developers = [new("", "", "")];
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
         var project = new Project(git, developers, tester, leadDev, productOwner);
         var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
-        var sprint = new SprintMock(project, scrumMaster, pipeline, "");
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "")
+        {
+            endDateTime = DateTime.Now.AddDays(14)
+        };
         sprint.sprintState = new DoingSprintState(sprint);
 
         // Act
@@ -29,20 +32,48 @@ public class DoingSprintStateTests
         // Assert
         Assert.Equivalent(sprint.sprintState, new DoingSprintState(sprint));
     }
-    
+
     [Fact]
-    public void ShouldNotCloseSprint()
+    public void ShouldFinishSprint()
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        List<User> developers = [new User("", "", "")];
+        List<User> developers = [new("", "", "")];
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
         var project = new Project(git, developers, tester, leadDev, productOwner);
         var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
-        var sprint = new SprintMock(project, scrumMaster, pipeline, "");
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "")
+        {
+            endDateTime = DateTime.Now.AddDays(14)
+        };
+        sprint.sprintState = new DoingSprintState(sprint);
+
+        // Act
+        sprint.FinishSprint();
+        
+        // Assert
+        Assert.Equivalent(sprint.sprintState, new FinishedSprintState(sprint));
+    }
+    
+    [Fact]
+    public void ShouldNotCloseSprint()
+    {
+        // Arrange
+        var git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
+        var pipeline = Substitute.For<IPipeline>();
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "")
+        {
+            endDateTime = DateTime.Now.AddDays(14)
+        };
         sprint.sprintState = new DoingSprintState(sprint);
 
         // Act
@@ -52,11 +83,6 @@ public class DoingSprintStateTests
         Assert.Equivalent(sprint.sprintState, new DoingSprintState(sprint));
     }
     
-    private class SprintMock : Sprint
-    {
-        public SprintMock(Project project, User scrumMaster, IPipeline pipeline, string name) : 
-            base(project, scrumMaster, pipeline, name)
-        {
-        }
-    }
+    private class SprintMock(Project project, User scrumMaster, IPipeline pipeline, string name)
+        : Sprint(project, scrumMaster, pipeline, name);
 }

@@ -14,14 +14,17 @@ public class CreatedSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        List<User> developers = [new User("", "", "")];
+        List<User> developers = [new("", "", "")];
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
         var project = new Project(git, developers, tester, leadDev, productOwner);
         var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
-        var sprint = new SprintMock(project, scrumMaster, pipeline, "");
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "")
+        {
+            endDateTime = DateTime.Now.AddDays(14)
+        };
         var backlogItem = new EditableBacklogItem("", 0, null, tester, scrumMaster);
         sprint.AddToBacklog(backlogItem);
 
@@ -37,14 +40,40 @@ public class CreatedSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        List<User> developers = [new User("", "", "")];
+        List<User> developers = [new("", "", "")];
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
         var project = new Project(git, developers, tester, leadDev, productOwner);
         var scrumMaster = new User("", "", "");
         var pipeline = Substitute.For<IPipeline>();
-        var sprint = new SprintMock(project, scrumMaster, pipeline, "");
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "")
+        {
+            endDateTime = DateTime.Now.AddDays(-1)
+        };
+
+        // Assert
+        Assert.Throws<ArgumentException>(() => sprint.StartSprint());
+    }
+    
+    [Fact]
+    public void StartSprintShouldNotStartSprintWhenEndDateTimeIsNotInTheFuture()
+    {
+        // Arrange
+        var git = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var scrumMaster = new User("", "", "");
+        var pipeline = Substitute.For<IPipeline>();
+        var sprint = new SprintMock(project, scrumMaster, pipeline, "")
+        {
+            endDateTime = DateTime.Now.AddDays(-1)
+        };
+        var backlogItem = new EditableBacklogItem("", 0, null, tester, scrumMaster);
+        sprint.AddToBacklog(backlogItem);
 
         // Assert
         Assert.Throws<ArgumentException>(() => sprint.StartSprint());
@@ -55,7 +84,7 @@ public class CreatedSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        List<User> developers = [new User("", "", "")];
+        List<User> developers = [new("", "", "")];
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
@@ -76,7 +105,7 @@ public class CreatedSprintStateTests
     {
         // Arrange
         var git = Substitute.For<IGitVersionControl>();
-        List<User> developers = [new User("", "", "")];
+        List<User> developers = [new("", "", "")];
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
@@ -92,11 +121,6 @@ public class CreatedSprintStateTests
         Assert.Equivalent(sprint.sprintState, new CreatedSprintState(sprint));
     }
     
-    private class SprintMock : Sprint
-    {
-        public SprintMock(Project project, User scrumMaster, IPipeline pipeline, string name) : 
-            base(project, scrumMaster, pipeline, name)
-        {
-        }
-    }
+    private class SprintMock(Project project, User scrumMaster, IPipeline pipeline, string name)
+        : Sprint(project, scrumMaster, pipeline, name);
 }

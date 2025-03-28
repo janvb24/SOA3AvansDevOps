@@ -40,10 +40,14 @@ IGitVersionControl versionControl = new GitVersionControl(
 Project project = new(versionControl, developers, tester, leadDev, productOwner);
 project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1, null, tester, scrumMaster));
 var backlogItem = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
+var backlogItem2 = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
+var backlogItem3 = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
 backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developers[0], tester, scrumMaster, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developers[0], tester, scrumMaster, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developers[0], tester, scrumMaster, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
+project.projectBacklog.AddBacklogItem(backlogItem2);
+project.projectBacklog.AddBacklogItem(backlogItem3);
 
 //Forum
 ForumTread tread = new ForumTread(notificationService, developers[0]);
@@ -83,9 +87,10 @@ IPipelineVisitor visitor = new RunPipelineVisitor();
 pipeline.Accept(visitor);
 
 // Sprint
-
 project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
-project.currentSprint.AddToBacklog(backlogItem);
+project.currentSprint!.AddToBacklog(backlogItem);
+project.currentSprint!.AddToBacklog(backlogItem2);
+project.currentSprint!.AddToBacklog(backlogItem3);
 
 // Generate report
 project.currentSprint.report.GenerateReport();

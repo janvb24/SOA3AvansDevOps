@@ -130,5 +130,31 @@ namespace AvansDevopsTests.ProjectManagementSystem.backlog {
             stateSub.Received(1).Deny();
             stateSub.Received(1).Complete();
         }
+
+        [Fact]
+        public void ShouldPersistSubtasks()
+        {
+            // Arrange
+            BacklogItem backlogItem = new EditableBacklogItem("Title", 1, null, tester, scrumMaster);
+            var stateSub = Substitute.For<IBacklogItemState>();
+            backlogItem.currentState = stateSub;
+            List<BacklogItem> subtasks =
+            [
+                new EditableBacklogItem("Title", 1, null, tester, scrumMaster),
+                new EditableBacklogItem("Title", 1, null, tester, scrumMaster)
+            ];
+            backlogItem.subTasks = subtasks;
+            List<BacklogItem> expected =
+            [
+                new NonEditableBacklogItem("Title", 1, null, tester, scrumMaster),
+                new NonEditableBacklogItem("Title", 1, null, tester, scrumMaster)
+            ];
+
+            // Act
+            backlogItem.PersistSubtasks();
+
+            // Assert
+            Assert.Equivalent(backlogItem.subTasks, expected, true);
+        }
     }
 }

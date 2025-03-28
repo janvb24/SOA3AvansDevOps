@@ -10,6 +10,8 @@ namespace AvansDevops.ProjectManagementSystem.backlog
         private BacklogItem? _parent;
         private List<BacklogItem>? _subTasks = null;
         private User? _developer;
+        public User tester { get; init; }
+        public User? scrumMaster { get; init; }
         public TodoBacklogItemState todoState;
         public DoingBacklogItemState doingState;
         public ReadyForTestingBacklogItemState readyForTestingState;
@@ -57,7 +59,7 @@ namespace AvansDevops.ProjectManagementSystem.backlog
             }
         }
 
-        protected BacklogItem(string title, int storyPoints, User? developer, User tester, User scrumMaster, List<BacklogItem>? subTasks = null, BacklogItem? parent = null) {
+        protected BacklogItem(string title, int storyPoints, User? developer, User? tester = null, User? scrumMaster = null, List<BacklogItem>? subTasks = null, BacklogItem? parent = null) {
             _title = title;               
             _storyPoints = storyPoints;
             this.developer = developer;
@@ -69,6 +71,9 @@ namespace AvansDevops.ProjectManagementSystem.backlog
                 _parent = null;
             }
 
+            this.tester = tester;
+            this.scrumMaster = scrumMaster;
+
             //States
             INotificationService notificationService = new NotificationService();
             todoState = new TodoBacklogItemState(this);
@@ -78,6 +83,22 @@ namespace AvansDevops.ProjectManagementSystem.backlog
             testedState = new TestedBacklogItemState(this, notificationService, tester);
             doneState = new DoneBacklogItemState(this);
             currentState = todoState;
+        }
+        
+        /// <summary>
+        /// Makes all subtasks persistent so they can not be changed again.
+        /// This also disables the ability to change their state.
+        /// </summary>
+        public void PersistSubtasks()
+        {
+            if (_subTasks == null) return;
+            
+            List<BacklogItem> persistentSubTasks = [];
+            _subTasks.ForEach(subTask =>
+            {
+                persistentSubTasks.Add(new NonEditableBacklogItem(subTask as EditableBacklogItem));
+            });
+            _subTasks = persistentSubTasks;
         }
 
         /// <summary>
