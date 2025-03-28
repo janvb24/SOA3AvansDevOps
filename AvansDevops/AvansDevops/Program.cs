@@ -16,7 +16,6 @@ using AvansDevops.DevOps.UtilityActions;
 using AvansDevops.ProjectManagementSystem.forum;
 using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem.sprint;
-using AvansDevops.ProjectManagementSystem.report;
 
 //Notification service
 INotificationService notificationService = new NotificationService();

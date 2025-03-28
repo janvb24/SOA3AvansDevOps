@@ -4,6 +4,7 @@ using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem;
 using AvansDevops.ProjectManagementSystem.backlog;
 using AvansDevops.ProjectManagementSystem.sprint;
+using AvansDevops.ProjectManagementSystem.sprint.SprintStates;
 using AvansDevops.SoftwareConfigurationManagement;
 
 namespace AvansDevopsTests.ProjectManagementSystem;
@@ -209,6 +210,61 @@ public class ProjectTests {
         
         // Assert
         Assert.Throws<ArgumentException>(() => project.AddNewBacklogItemToSprint(backlogItem));
+    }
+
+    [Fact]
+    public void ShouldNotAddSummaryWhenNoCurrentSprint()
+    {
+        // Arrange
+        var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
+
+        // Assert
+        Assert.Throws<NullReferenceException>(() => project.AddSummaryToReviewSprint(@"file/location.pdf"));
+    }
+    
+    [Fact]
+    public void ShouldNotAddSummaryWhenCurrentSprintIsReleaseSprint()
+    {
+        // Arrange
+        var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
+        var scrumMaster = new User("name", "email@server.com", "0612345678");
+        var backlogItem = new BacklogItemMock("backlog item", 0, tester, scrumMaster);
+        var pipeline = Substitute.For<Pipeline>();
+        var deployAction = Substitute.For<DeployAction>("deploy.server.com");
+        pipeline.GetActions().Returns([deployAction]);
+        project.projectBacklog.AddBacklogItem(backlogItem);
+        project.NewSprint(scrumMaster, pipeline, "new sprint", SprintType.RELEASE_SPRINT);
+        project.currentSprint.sprintState = new FinishedSprintState(project.currentSprint);
+    
+        // Assert
+        Assert.Throws<TypeAccessException>(() => project.AddSummaryToReviewSprint(@"file/location.pdf"));
+    }
+    
+    [Fact]
+    public void ShouldNotAddSummaryWhenSprintIsNotFinished()
+    {
+        // Arrange
+        var gitVersionControl = Substitute.For<IGitVersionControl>();
+        List<User> developers = [new User("", "", "")];
+        var tester = new User("", "", "");
+        var leadDev = new User("", "", "");
+        var productOwner = new User("", "", "");
+        var project = new Project(gitVersionControl, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
+        var scrumMaster = new User("name", "email@server.com", "0612345678");
+        project.NewSprint(scrumMaster, null, "sprint", SprintType.REVIEW_SPRINT);
+        
+        // Assert
+        Assert.Throws<Exception>(() => project.AddSummaryToReviewSprint(@"file/location.pdf"));
     }
     
     private class BacklogItemMock(

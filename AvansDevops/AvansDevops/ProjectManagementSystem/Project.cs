@@ -4,6 +4,7 @@ using AvansDevops.ProjectManagementSystem.sprint;
 using AvansDevops.ProjectManagementSystem.forum;
 using AvansDevops.SoftwareConfigurationManagement;
 using AvansDevops.Notifications;
+using AvansDevops.ProjectManagementSystem.sprint.SprintStates;
 
 namespace AvansDevops.ProjectManagementSystem
 {
@@ -94,6 +95,23 @@ namespace AvansDevops.ProjectManagementSystem
             
             if (!inProjectBacklog) currentSprint.AddToBacklog(backlogItem);
             else throw new ArgumentException("The backlog item can not be in the project backlog");
+        }
+
+        /// <summary>
+        /// Adds a summary to the current sprint
+        /// </summary>
+        /// <param name="fileLocation">File location of the pdf to be uploaded</param>
+        /// <exception cref="NullReferenceException">Thrown when there is no active sprint</exception>
+        /// <exception cref="TypeAccessException">Thrown when sprint is not a review sprint</exception>
+        /// <exception cref="Exception">Thrown when sprint is not finished yet</exception>
+        public void AddSummaryToReviewSprint(string fileLocation)
+        {
+            if (currentSprint == null) throw new NullReferenceException("The current sprint must not be empty");
+            if (currentSprint is not ReviewSprint sprint) throw new TypeAccessException("The current sprint must be a review sprint");
+            if (currentSprint.sprintState is not FinishedSprintState)
+                throw new Exception("Sprint should be finished to add a summary");
+            
+            sprint.SaveSummaryPdf(fileLocation);
         }
     }
 }
