@@ -15,7 +15,7 @@ public interface IPipelineBuilder
     /// Builds the pipeline and returns a concrete pipeline.
     /// </summary>
     /// <returns>The concrete pipeline build with the builder.</returns>
-    public Pipeline Build();
+    public ConcretePipeline Build();
 
     public IPipelineBuilder AddPackageAction(PackageAction action);
     

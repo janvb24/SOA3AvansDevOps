@@ -11,7 +11,7 @@ namespace AvansDevops.DevOps;
 public class RunPipelineVisitor : IPipelineVisitor
 {
     
-    public void VisitPipeline(Pipeline pipeline)
+    public void VisitPipeline(ConcretePipeline pipeline)
     {
         Console.WriteLine(!pipeline.succeeded ? 
             "Pipeline failed!" : 

@@ -1,5 +1,6 @@
 ﻿using AvansDevops.DevOps;
 using AvansDevops.DevOps.DeployActions;
+using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem;
 using AvansDevops.ProjectManagementSystem.backlog;
 using AvansDevops.ProjectManagementSystem.report;
@@ -14,9 +15,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("Lead", "", "");
             var developer = new User("Dev", "", "");
-            var project = new Project(git, [developer], developer, leadDev, developer);
+            var project = new Project(git, [developer], developer, leadDev, developer, Substitute.For<INotificationService>());
             User scrumMaster = new User("scrum", "", "");
-            IPipeline pipeline = Substitute.For<IPipeline>();
+            Pipeline pipeline = Substitute.For<Pipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
             sprint.backlog.AddBacklogItem(new BacklogItemMock("Test", 1, scrumMaster, scrumMaster, developer));
 
@@ -48,9 +49,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("", "", "");
             var developer = new User("Dev", "", "");
-            var project = new Project(git, [developer], developer, leadDev, developer);
+            var project = new Project(git, [developer], developer, leadDev, developer, Substitute.For<INotificationService>());
             User scrumMaster = new User("", "", "");
-            IPipeline pipeline = Substitute.For<IPipeline>();
+            Pipeline pipeline = Substitute.For<Pipeline>();
             Sprint sprint = new ReviewSprint(project, scrumMaster, pipeline, "name");
             sprint.backlog.AddBacklogItem(new BacklogItemMock("Test", 1, scrumMaster, scrumMaster));
 
@@ -68,9 +69,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("", "", "");
             var developer = new User("Dev", "", "");
-            var project = new Project(git, [developer], developer, leadDev, developer);
+            var project = new Project(git, [developer], developer, leadDev, developer, Substitute.For<INotificationService>());
             User scrumMaster = new User("", "", "");
-            IPipeline pipeline = Substitute.For<IPipeline>();
+            Pipeline pipeline = Substitute.For<Pipeline>();
             pipeline.GetActions().Returns([new AzureDeployAction("test")]);
             Sprint sprint = new ReleaseSprint(project, scrumMaster, pipeline, "name");
             sprint.backlog.AddBacklogItem(new BacklogItemMock("Test", 1, scrumMaster, scrumMaster));
@@ -88,9 +89,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             // Arrange
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var developer = new User("Dev", "", "");
-            var project = new Project(git, [developer], developer, developer, developer);
+            var project = new Project(git, [developer], developer, developer, developer, Substitute.For<INotificationService>());
             User scrumMaster = new User("", "", "");
-            IPipeline pipeline = Substitute.For<IPipeline>();
+            Pipeline pipeline = Substitute.For<Pipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
             sprint.backlog.AddBacklogItem(new BacklogItemMock("Test", 1, scrumMaster, scrumMaster));
 
@@ -107,9 +108,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var leadDev = new User("Lead", "", "");
             var developer = new User("Dev", "", "");
-            var project = new Project(git, [developer], developer, leadDev, developer);
+            var project = new Project(git, [developer], developer, leadDev, developer, Substitute.For<INotificationService>());
             User scrumMaster = new User("scrum", "", "");
-            IPipeline pipeline = Substitute.For<IPipeline>();
+            Pipeline pipeline = Substitute.For<Pipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
             sprint.backlog.AddBacklogItem(new BacklogItemMock("Test", 1, scrumMaster, scrumMaster, developer));
 
@@ -126,9 +127,9 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
         public void TestGenerateBurndownChart() {
             IGitVersionControl git = Substitute.For<IGitVersionControl>();
             var developer = new User("Dev", "", "");
-            var project = new Project(git, [developer], developer, developer, developer);
+            var project = new Project(git, [developer], developer, developer, developer, Substitute.For<INotificationService>());
             User scrumMaster = new User("scrum", "", "");
-            IPipeline pipeline = Substitute.For<IPipeline>();
+            Pipeline pipeline = Substitute.For<Pipeline>();
             Sprint sprint = new SprintMock(project, scrumMaster, pipeline, "name");
             sprint.backlog.AddBacklogItem(new BacklogItemMock("Test", 1, scrumMaster, scrumMaster, developer));
 
@@ -142,7 +143,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.report {
         }
     }
 
-    internal class SprintMock(Project project, User scrumMaster, IPipeline pipeline, string name, ReportTemplate? reportTemplate = null) : Sprint(project, scrumMaster, pipeline, name, reportTemplate) {
+    internal class SprintMock(Project project, User scrumMaster, Pipeline pipeline, string name, ReportTemplate? reportTemplate = null) : Sprint(project, scrumMaster, pipeline, name, reportTemplate) {
     }
 
     internal class BacklogItemMock(string title, int storyPoints, User tester, User scrumMaster, User? developer = null, List<BacklogItem>? subTasks = null, BacklogItem? parent = null) : BacklogItem(title, storyPoints, developer, tester, scrumMaster, subTasks, parent) {

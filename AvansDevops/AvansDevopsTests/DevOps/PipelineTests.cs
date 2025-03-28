@@ -13,7 +13,7 @@ public class PipelineTests
     {
         // Arrange
         var notificationService = Substitute.For<INotificationService>();
-        var pipeline = new Pipeline(notificationService);
+        var pipeline = new ConcretePipeline(notificationService);
         var visitor = Substitute.For<IPipelineVisitor>();
         var failedAction = Substitute.For<Component>();
         failedAction.Accept(visitor).Returns(false);
@@ -32,7 +32,7 @@ public class PipelineTests
     {
         // Arrange
         var notificationService = Substitute.For<INotificationService>();
-        var pipeline = new Pipeline(notificationService);
+        var pipeline = new ConcretePipeline(notificationService);
         var visitor = Substitute.For<IPipelineVisitor>();
         var succeededAction = Substitute.For<Component>();
         succeededAction.Accept(visitor).Returns(true);
@@ -51,7 +51,7 @@ public class PipelineTests
     {
         // Arrange
         var notificationService = Substitute.For<INotificationService>();
-        var pipeline = new Pipeline(notificationService);
+        var pipeline = new ConcretePipeline(notificationService);
         var testAction = Substitute.For<TestAction>();
         var buildAction = Substitute.For<BuildAction>();
         pipeline.Add(testAction);

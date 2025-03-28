@@ -1,7 +1,6 @@
 ﻿namespace AvansDevops.ProjectManagementSystem.sprint.SprintStates;
 
-public class DoingSprintState(Sprint sprint) : ISprintState
-{
+public class DoingSprintState(Sprint sprint) : ISprintState {
     public void StartSprint()
     {
         Console.WriteLine("Sprint has already been started");
@@ -13,8 +12,12 @@ public class DoingSprintState(Sprint sprint) : ISprintState
         Console.WriteLine("Sprint has been finished");
     }
 
-    public void CloseSprint()
-    {
-        Console.WriteLine("Sprint can not be closed during the doing state");
+    public void ApproveSprint() {
+        Console.WriteLine("Sprint has not been finished yet");
+    }
+
+    public void DenySprint() {
+        Console.WriteLine("Sprint has not been finished yet");
+    
     }
 }

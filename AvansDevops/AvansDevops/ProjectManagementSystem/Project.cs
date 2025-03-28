@@ -3,6 +3,7 @@ using AvansDevops.ProjectManagementSystem.backlog;
 using AvansDevops.ProjectManagementSystem.sprint;
 using AvansDevops.ProjectManagementSystem.forum;
 using AvansDevops.SoftwareConfigurationManagement;
+using AvansDevops.Notifications;
 
 namespace AvansDevops.ProjectManagementSystem
 {
@@ -15,8 +16,9 @@ namespace AvansDevops.ProjectManagementSystem
         public User productOwner { get; set; }
         public Forum forum { get; set; } = new Forum();
         public Sprint? currentSprint { get; private set; }
+        public INotificationService notificationService { get; set; }
 
-        public Project(IGitVersionControl versionControl, List<User> developers, User tester, User leadDeveloper, User productOwner)
+        public Project(IGitVersionControl versionControl, List<User> developers, User tester, User leadDeveloper, User productOwner, INotificationService notificationService)
         {
             if (developers.Count == 0) throw new ArgumentException("There must be at least 1 developer");
             
@@ -25,6 +27,7 @@ namespace AvansDevops.ProjectManagementSystem
             this.tester = tester;
             this.leadDeveloper = leadDeveloper;
             this.productOwner = productOwner;
+            this.notificationService = notificationService;
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace AvansDevops.ProjectManagementSystem
         /// <param name="type">The type of the sprint</param>
         /// <exception cref="Exception">Thrown when there is already an active sprint</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when it does not match any sprint type</exception>
-        public void NewSprint(User scrumMaster, IPipeline pipeline, string name, SprintType type)
+        public void NewSprint(User scrumMaster, Pipeline pipeline, string name, SprintType type)
         {
             if (currentSprint != null) throw new Exception("There should not be an active sprint running"); 
             
