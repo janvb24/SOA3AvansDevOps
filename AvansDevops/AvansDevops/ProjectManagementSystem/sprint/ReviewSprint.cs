@@ -6,6 +6,7 @@ public class ReviewSprint(Project project, User scrumMaster, Pipeline pipeline, 
     Sprint(project, scrumMaster, pipeline, name)
 {
     public bool summaryAdded { get; private set; }
+    public bool runPipelineOnApproval { get; set; } = true;
     
     /// <summary>
     /// Saves a summary as PDF

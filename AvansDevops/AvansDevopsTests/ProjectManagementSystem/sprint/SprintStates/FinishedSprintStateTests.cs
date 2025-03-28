@@ -104,7 +104,7 @@ namespace AvansDevopsTests.ProjectManagementSystem.sprint.SprintStates {
         }
 
         [Fact]
-        public void CloseSprintShouldCloseIfApproveAndReviewSprint() {
+        public void CloseSprintShouldNotCloseIfApproveAndReviewSprintButNoSummaryAdded() {
             // Arrange
             var git = Substitute.For<IGitVersionControl>();
             List<User> developers = [new User("", "", "")];
@@ -117,6 +117,82 @@ namespace AvansDevopsTests.ProjectManagementSystem.sprint.SprintStates {
             pipeline.Accept(Arg.Any<RunPipelineVisitor>()).Returns(true);
             var sprint = new ReviewSprint(project, scrumMaster, pipeline, "");
             sprint.sprintState = new FinishedSprintState(sprint);
+
+            // Act
+            sprint.CloseSprint(true);
+
+            // Assert
+            pipeline.DidNotReceive().Accept(Arg.Any<RunPipelineVisitor>());
+            Assert.Equivalent(sprint.sprintState, new FinishedSprintState(sprint));
+            Assert.False(sprint.approved);
+        }
+
+        [Fact]
+        public void CloseSprintShouldNotCloseIfApproveAndReviewSprintButPipelineFails() {
+            // Arrange
+            var git = Substitute.For<IGitVersionControl>();
+            List<User> developers = [new User("", "", "")];
+            var tester = new User("", "", "");
+            var leadDev = new User("", "", "");
+            var productOwner = new User("", "", "");
+            var project = new Project(git, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
+            var scrumMaster = new User("", "", "");
+            var pipeline = Substitute.For<Pipeline>();
+            pipeline.Accept(Arg.Any<RunPipelineVisitor>()).Returns(false);
+            var sprint = new ReviewSprint(project, scrumMaster, pipeline, "");
+            sprint.sprintState = new FinishedSprintState(sprint);
+            sprint.SaveSummaryPdf("test.pdf");
+
+            // Act
+            sprint.CloseSprint(true);
+
+            // Assert
+            pipeline.Received().Accept(Arg.Any<RunPipelineVisitor>());
+            Assert.Equivalent(sprint.sprintState, new FinishedSprintState(sprint));
+            Assert.False(sprint.approved);
+        }
+
+        [Fact]
+        public void CloseSprintShouldCloseIfApproveAndReviewSprintAndPipelineSuceeds() {
+            // Arrange
+            var git = Substitute.For<IGitVersionControl>();
+            List<User> developers = [new User("", "", "")];
+            var tester = new User("", "", "");
+            var leadDev = new User("", "", "");
+            var productOwner = new User("", "", "");
+            var project = new Project(git, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
+            var scrumMaster = new User("", "", "");
+            var pipeline = Substitute.For<Pipeline>();
+            pipeline.Accept(Arg.Any<RunPipelineVisitor>()).Returns(true);
+            var sprint = new ReviewSprint(project, scrumMaster, pipeline, "");
+            sprint.sprintState = new FinishedSprintState(sprint);
+            sprint.SaveSummaryPdf("test.pdf");
+
+            // Act
+            sprint.CloseSprint(true);
+
+            // Assert
+            pipeline.Received().Accept(Arg.Any<RunPipelineVisitor>());
+            Assert.Equivalent(sprint.sprintState, new ClosedSprintState());
+            Assert.True(sprint.approved);
+        }
+
+        [Fact]
+        public void CloseSprintShouldCloseIfApproveAndReviewSprintAndPipelineShouldNotRun() {
+            // Arrange
+            var git = Substitute.For<IGitVersionControl>();
+            List<User> developers = [new User("", "", "")];
+            var tester = new User("", "", "");
+            var leadDev = new User("", "", "");
+            var productOwner = new User("", "", "");
+            var project = new Project(git, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
+            var scrumMaster = new User("", "", "");
+            var pipeline = Substitute.For<Pipeline>();
+            pipeline.Accept(Arg.Any<RunPipelineVisitor>()).Returns(true);
+            var sprint = new ReviewSprint(project, scrumMaster, pipeline, "");
+            sprint.sprintState = new FinishedSprintState(sprint);
+            sprint.runPipelineOnApproval = false;
+            sprint.SaveSummaryPdf("test.pdf");
 
             // Act
             sprint.CloseSprint(true);
