@@ -1,27 +1,10 @@
-﻿using AvansDevops.Notifications;
+﻿namespace AvansDevops.DevOps;
 
-namespace AvansDevops.DevOps;
+public abstract class Pipeline : Composite {
+    /// <summary>
+    /// Method to fetch all the child actions of the pipeline
+    /// </summary>
+    /// <returns>Pipeline actions as a Component</returns>
 
-public class Pipeline : Composite, IPipeline
-{
-
-    public bool succeeded { get; private set; }
-    private readonly INotificationService _notificationService;
-    
-    public Pipeline(INotificationService notificationService)
-    {
-        _notificationService = notificationService;
-    }
-    
-    public override bool Accept(IPipelineVisitor visitor)
-    {
-        succeeded = base.Accept(visitor);
-        visitor.VisitPipeline(this);
-        return succeeded;
-    }
-
-    public List<Component> GetActions()
-    {
-        return parts;
-    }
+    abstract public List<Component> GetActions();
 }

@@ -1,6 +1,7 @@
 ﻿using AvansDevops.DevOps;
 using AvansDevops.DevOps.DeployActions;
 using AvansDevops.DevOps.TestActions;
+using AvansDevops.Notifications;
 using AvansDevops.ProjectManagementSystem;
 using AvansDevops.ProjectManagementSystem.sprint;
 using AvansDevops.SoftwareConfigurationManagement;
@@ -18,9 +19,9 @@ public class ReleaseSprintTests
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var project = new Project(git, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("", "", "");
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
         var deployAction = Substitute.For<DeployAction>("url");
         pipeline.GetActions().Returns([deployAction]);
 
@@ -40,9 +41,9 @@ public class ReleaseSprintTests
         var tester = new User("", "", "");
         var leadDev = new User("", "", "");
         var productOwner = new User("", "", "");
-        var project = new Project(git, developers, tester, leadDev, productOwner);
+        var project = new Project(git, developers, tester, leadDev, productOwner, Substitute.For<INotificationService>());
         var scrumMaster = new User("", "", "");
-        var pipeline = Substitute.For<IPipeline>();
+        var pipeline = Substitute.For<Pipeline>();
         var testAction = Substitute.For<TestAction>();
         pipeline.GetActions().Returns([testAction]);
 

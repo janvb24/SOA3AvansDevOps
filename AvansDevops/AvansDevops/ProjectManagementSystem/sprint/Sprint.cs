@@ -14,9 +14,10 @@ public abstract class Sprint
     private DateTime _endDateTime;
     private Project _project;
     private User _scrumMaster;
-    private IPipeline _pipeline;
+    private Pipeline _pipeline;
     public Backlog backlog;
     public Report report;
+    public bool approved { get; set; }
 
     public string name
     {
@@ -48,7 +49,7 @@ public abstract class Sprint
         set => _scrumMaster = editable ? value : throw new ArgumentException(UNEDITABLE_EXCEPTION);
     }
 
-    public IPipeline pipeline
+    public Pipeline pipeline
     {
         get => _pipeline;
         set => _pipeline = editable ? value : throw new ArgumentException(UNEDITABLE_EXCEPTION);
@@ -57,7 +58,7 @@ public abstract class Sprint
     public ISprintState sprintState { get; set; }
     public bool editable { get; set; }
 
-    protected Sprint(Project project, User scrumMaster, IPipeline pipeline, string name, ReportTemplate? reportTemplate = null)
+    protected Sprint(Project project, User scrumMaster, Pipeline pipeline, string name, ReportTemplate? reportTemplate = null)
     {
         _project = project;
         _scrumMaster = scrumMaster;
@@ -125,5 +126,9 @@ public abstract class Sprint
     /// <summary>
     /// Close the sprint
     /// </summary>
-    public void CloseSprint() => sprintState.CloseSprint();
+    public void CloseSprint(bool approve) { 
+        if (approve) sprintState.ApproveSprint();
+        else sprintState.DenySprint();
+        
+    }
 }
