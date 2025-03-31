@@ -8,22 +8,22 @@
 
         // Override setters to prevent modification
         public override string title {
-            get => base.title;
+            get => _title;
             set => throw new ArgumentException("Title cannot be altered");
         }
 
         public override int storyPoints {
-            get => base.storyPoints;
+            get => _storyPoints;
             set => throw new ArgumentException("Story points cannot be altered");
         }
 
-        public override List<BacklogItem> subTasks {
-            get => base.subTasks;
+        public override List<BacklogItem>? subTasks {
+            get => _subTasks;
             set => throw new ArgumentException("Subtasks cannot be altered");
         }
 
         public override BacklogItem? parent {
-            get => base.parent;
+            get => _parent;
             set => throw new ArgumentException("Parent cannot be altered");
         }
     }
