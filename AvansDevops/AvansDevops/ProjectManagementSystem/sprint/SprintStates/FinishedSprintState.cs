@@ -4,8 +4,7 @@ namespace AvansDevops.ProjectManagementSystem.sprint.SprintStates {
     public class FinishedSprintState(Sprint sprint) : ISprintState {
         public void ApproveSprint() {
             if (sprint is ReleaseSprint) {
-                IPipelineVisitor visitor = new RunPipelineVisitor();
-                bool success = sprint.pipeline.Accept(visitor);
+                bool success = RunPipeline();
 
                 if (success) {
                     sprint.approved = true;
@@ -17,9 +16,34 @@ namespace AvansDevops.ProjectManagementSystem.sprint.SprintStates {
                 return;
             }
 
+            if (sprint is ReviewSprint reviewSprint) {
+                if (reviewSprint.summaryAdded == false) {
+                    Console.WriteLine("Summary must be added before sprint can be approved");
+                    return;
+                }
+
+                if (reviewSprint.runPipelineOnApproval) {
+                    bool success = RunPipeline();
+
+                    if (success) {
+                        sprint.approved = true;
+                        sprint.sprintState = new ClosedSprintState();
+                    } else {
+                        Console.WriteLine("Pipeline failed, sprint not approved");
+                    }
+
+                    return;
+                }
+            }
+
             // update sprint state
             sprint.approved = true;
             sprint.sprintState = new ClosedSprintState();
+        }
+
+        private bool RunPipeline() {
+            IPipelineVisitor visitor = new RunPipelineVisitor();
+            return sprint.pipeline.Accept(visitor);
         }
 
         public void DenySprint() {
