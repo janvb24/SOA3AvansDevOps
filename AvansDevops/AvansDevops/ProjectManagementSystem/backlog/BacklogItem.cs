@@ -5,10 +5,10 @@ namespace AvansDevops.ProjectManagementSystem.backlog
 {
     public abstract class BacklogItem {
         //NOTE: virtual properties are used to allow for overriding in NonEditableBacklogItem so they cannot be altered in NonEditableBacklogItem
-        private string _title = string.Empty;
-        private int _storyPoints;
-        private BacklogItem? _parent;
-        private List<BacklogItem>? _subTasks = null;
+        protected string _title = string.Empty;
+        protected int _storyPoints;
+        protected BacklogItem? _parent;
+        protected List<BacklogItem>? _subTasks = null;
         private User? _developer;
         private User? _tester;
         private User? _scrumMaster;
