@@ -20,6 +20,14 @@ using AvansDevops.ProjectManagementSystem.sprint;
 //Notification service
 INotificationService notificationService = new NotificationService();
 
+//Version Control
+IGitVersionControl versionControl = new GitVersionControl(
+    new BranchGitVersionControlAction(),
+    new CommitGitVersionControlAction(),
+    new FetchGitVersionControlAction(),
+    new PushGitVersionControlAction()
+);
+
 //Users
 List<User> developers = [new User("dev", "dev@email.nl", "0638475686")];
 User tester = new User("test", "test@email.nl", "0638475686");
@@ -27,26 +35,15 @@ User leadDev = new User("leadDev", "leadDev@email.nl", "0638475686");
 User productOwner = new User("productOwner", "productOwner@email.nl", "0638475686");
 User scrumMaster = new User("scrum", "scrum@email.nl", "0638475686");
 
-//Version Control
-IGitVersionControl versionControl = new GitVersionControl(
-    new BranchGitVersionControlAction(), 
-    new CommitGitVersionControlAction(), 
-    new FetchGitVersionControlAction(), 
-    new PushGitVersionControlAction()
-);
 
 //Project with backlog
 Project project = new(versionControl, developers, tester, leadDev, productOwner, notificationService);
 project.projectBacklog.AddBacklogItem(new EditableBacklogItem("Initialize Git", 1, null, tester, scrumMaster));
 var backlogItem = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
-var backlogItem2 = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
-var backlogItem3 = new EditableBacklogItem("Add domain model", 8, developers[0], tester, scrumMaster);
 backlogItem.subTasks!.Add(new EditableBacklogItem("Add User domain model class", 5, developers[0], tester, scrumMaster, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add role domain model ENUM", 1, developers[0], tester, scrumMaster, null, backlogItem));
 backlogItem.subTasks.Add(new EditableBacklogItem("Add Task domain model class", 3, developers[0], tester, scrumMaster, null, backlogItem));
 project.projectBacklog.AddBacklogItem(backlogItem);
-project.projectBacklog.AddBacklogItem(backlogItem2);
-project.projectBacklog.AddBacklogItem(backlogItem3);
 
 //Forum
 ForumTread tread = new ForumTread(notificationService, developers[0]);
@@ -55,6 +52,25 @@ tread.items[0].nextTreadItem = new ForumTreadItem("new item after item 1", devel
 tread.items[0].nextTreadItem = new ForumTreadItem("extra new content", developers[0]);
 project.forum.newTread(tread);
 Console.WriteLine(tread.items[0]);
+
+// Build and run a CICD pipeline
+IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
+ConcretePipeline pipeline = pipelineBuilder
+    .AddUtilityAction(new CmdUtilityAction("Echo Hello world!"))
+    .AddSourceAction(new GitSourceAction("https://github.com/janvb24/SOA3AvansDevOps.git"))
+    .AddPackageAction(new NugetPackageAction("https://www.nuget.org/packages/xunit"))
+    .AddBuildAction(new DotNetCoreBuildAction())
+    .AddTestAction(new RunTestsAction())
+    .AddTestAction(new PublishCodeCoverageResultAction())
+    .AddAnalysisAction(new SonarqubeAnalysisAction())
+    .AddDeployAction(new AzureDeployAction("https://www.azure.com"))
+    .Build();
+
+
+// Sprint
+project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
+project.currentSprint!.endDateTime = DateTime.Now.AddDays(14);
+project.MoveBacklogItemToSprint(backlogItem);
 
 //Backlog state
 backlogItem.currentState.Start(); //TODO --> DOINT
@@ -70,26 +86,10 @@ backlogItem.currentState.Start(); //READY FOR TESTING --> TESTING
 backlogItem.currentState.Complete(); //TESTING --> TESTED 
 backlogItem.currentState.Approve(); //TESTED --> DONE
 
-// Build and run a CICD pipeline
-IPipelineBuilder pipelineBuilder = new ConcretePipelineBuilder();
-ConcretePipeline pipeline = pipelineBuilder
-    .AddUtilityAction(new CmdUtilityAction("Echo Hello world!"))
-    .AddSourceAction(new GitSourceAction("https://github.com/janvb24/SOA3AvansDevOps.git"))
-    .AddPackageAction(new NugetPackageAction("https://www.nuget.org/packages/xunit"))
-    .AddBuildAction(new DotNetCoreBuildAction())
-    .AddTestAction(new RunTestsAction())
-    .AddTestAction(new PublishCodeCoverageResultAction())
-    .AddAnalysisAction(new SonarqubeAnalysisAction())
-    .AddDeployAction(new AzureDeployAction("https://www.azure.com"))
-    .Build();
-IPipelineVisitor visitor = new RunPipelineVisitor();
-pipeline.Accept(visitor);
-
-// Sprint
-project.NewSprint(scrumMaster, pipeline, "My sprint", SprintType.RELEASE_SPRINT);
-project.currentSprint!.AddToBacklog(backlogItem);
-project.currentSprint!.AddToBacklog(backlogItem2);
-project.currentSprint!.AddToBacklog(backlogItem3);
+//Sprint state
+project.currentSprint!.StartSprint(); //CREATED --> DOING
+project.currentSprint!.FinishSprint(); //DOING --> FINISHED
+project.currentSprint!.CloseSprint(true); //FINISHED --> CLOSED
 
 // Generate report
 project.currentSprint.report.GenerateReport();
